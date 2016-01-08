@@ -1,0 +1,83 @@
+<!DOCTYPE customPreviewShaders>
+
+<OpenBRF>
+
+  <previewShader>
+    <techniques>
+      <!--a comma separated list of all "techniques" that should be previewed by this -->
+      example1, example2
+    </techniques>
+    <vertexProgram>
+    #version 120
+
+    varying vec3 lightDir;
+    varying vec4 color;
+    varying vec2 tc;
+    varying vec3 norm;
+    varying vec3 tanx;
+    varying vec3 tany;
+    uniform float usePerVertColor;
+
+    void main(){
+        gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+        lightDir = vec3(0.0,0.0,1.0)*gl_NormalMatrix;
+        color = (usePerVertColor>0.0)?gl_Color:vec4(1.0,1.0,1.0,1.0);
+        tc = gl_MultiTexCoord0.st;
+        lightDir =  normalize( vec3(0.0,0.0,1.0) * gl_NormalMatrix );
+        norm =  normalize( gl_Normal );
+        tanx = gl_MultiTexCoord1.xyz;
+        tany = cross( norm, tanx );
+        tany *= (gl_MultiTexCoord2.x==0.0)?-1.0:1.0;
+        /*norm = normalize(norm);*/
+    }
+    </vertexProgram>
+    <fragmentProgram>
+    #version 120
+
+    uniform vec3 spec_col;
+    uniform float spec_exp;
+    varying vec3 lightDir;
+    varying vec4 color;
+    varying vec2 tc;
+    varying vec3 norm;
+    varying vec3 tanx;
+    varying vec3 tany;
+
+    uniform sampler2D samplRgb;
+    uniform sampler2D samplBump;
+    uniform sampler2D samplSpec;
+
+    void main(){
+        vec4 tex = texture2D( samplRgb,tc);
+        vec3 normt;
+
+        /* compute normal from normalmap?
+        normt.xy = +texture2D( samplBump,tc).ag * 2.0 - vec2(1.0);
+
+        normt.z = sqrt( 1.0-dot(normt.xy,normt.xy));
+
+        normt = normt.z * norm +
+                normt.x * tanx +
+                normt.y * tany;
+        */
+
+        normt = norm; // no normalmap...
+        float diffuse = dot(normt , lightDir ) ;
+        diffuse = (diffuse &lt; 0.0)?0.0:diffuse;
+        diffuse = (diffuse &gt; 1.0)?1.0:diffuse;
+
+        vec3 specmapVal =  texture2D( samplSpec,tc).rgb;
+
+        gl_FragColor.rgb = tex.rgb*color.rgb*(vec3(diffuse*0.8+0.2)
+                         + spec_col*(specmapVal*pow( diffuse , spec_exp))*0.5
+        );
+
+        if (tex.a &lt; 0.1) discard;
+        gl_FragColor.a = tex.a;
+        gl_FragColor.b = 1.0; // just as a test: blue-ize everything
+    }
+
+    </fragmentProgram>
+  </previewShader>
+
+</OpenBRF>

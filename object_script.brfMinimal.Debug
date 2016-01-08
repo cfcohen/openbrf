@@ -1,0 +1,14 @@
+INPUT(
+./minimal\obj\saveLoad.o
+./minimal\obj\brfMesh.o
+./minimal\obj\brfData.o
+./minimal\obj\brfShader.o
+./minimal\obj\brfTexture.o
+./minimal\obj\brfMaterial.o
+./minimal\obj\brfSkeleton.o
+./minimal\obj\brfAnimation.o
+./minimal\obj\brfBody.o
+./minimal\obj\ioSMD.o
+./minimal\obj\ioMD3.o
+./minimal\obj\mainBrfMinimal.o
+);

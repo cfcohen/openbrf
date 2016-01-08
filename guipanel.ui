@@ -1,0 +1,3759 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GuiPanel</class>
+ <widget class="QWidget" name="GuiPanel">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>200</width>
+    <height>2282</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>200</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>200</width>
+    <height>16777215</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>OpenBRF</string>
+  </property>
+  <widget class="QGroupBox" name="meshData">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>181</width>
+     <height>221</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="title">
+    <string>Data</string>
+   </property>
+   <property name="flat">
+    <bool>false</bool>
+   </property>
+   <widget class="QLineEdit" name="boxMaterial">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>20</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Set material used by this mesh.</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labMatName">
+    <property name="geometry">
+     <rect>
+      <x>5</x>
+      <y>20</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Click to follow material (if known in module.ini).</string>
+    </property>
+    <property name="text">
+     <string>&lt;a href=&quot;link&quot;&gt;Material&lt;/a&gt;:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="boxNVerts">
+    <property name="geometry">
+     <rect>
+      <x>45</x>
+      <y>130</y>
+      <width>46</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string extracomment="number of vertices"/>
+    </property>
+    <property name="statusTip">
+     <string>Number of vertices of this mesh, including seams.</string>
+    </property>
+    <property name="numDigits">
+     <number>6</number>
+    </property>
+    <property name="segmentStyle">
+     <enum>QLCDNumber::Flat</enum>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="boxFlags">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>80</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string extracomment="flags"/>
+    </property>
+    <property name="statusTip">
+     <string>Mesh flags</string>
+    </property>
+    <property name="inputMask">
+     <string>000000000000; </string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>5</x>
+      <y>80</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Flags:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="boxTexture">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>50</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string/>
+    </property>
+    <property name="statusTip">
+     <string>Diffuse texture name (depends on material)</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>5</x>
+      <y>50</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Texture:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+    <property name="textInteractionFlags">
+     <set>Qt::TextSelectableByMouse</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>16</x>
+      <y>110</y>
+      <width>31</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>faces:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="boxNFaces">
+    <property name="geometry">
+     <rect>
+      <x>1</x>
+      <y>130</y>
+      <width>46</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string extracomment="number of faces"/>
+    </property>
+    <property name="statusTip">
+     <string>Number of triangles of this mesh.</string>
+    </property>
+    <property name="numDigits">
+     <number>6</number>
+    </property>
+    <property name="segmentStyle">
+     <enum>QLCDNumber::Flat</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>110</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>vert:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="boxNPos">
+    <property name="geometry">
+     <rect>
+      <x>91</x>
+      <y>130</y>
+      <width>46</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string extracomment="number of vertex positions"/>
+    </property>
+    <property name="statusTip">
+     <string>Number of different X,Y, Z position of this mesh.</string>
+    </property>
+    <property name="numDigits">
+     <number>6</number>
+    </property>
+    <property name="segmentStyle">
+     <enum>QLCDNumber::Flat</enum>
+    </property>
+    <property name="intValue" stdset="0">
+     <number>12</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>93</x>
+      <y>110</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>pos:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="boxNFrames">
+    <property name="geometry">
+     <rect>
+      <x>134</x>
+      <y>130</y>
+      <width>46</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string extracomment="number of frames (vertex animation)"/>
+    </property>
+    <property name="statusTip">
+     <string>Number of frames (&gt;1 for vertex animated meshes).</string>
+    </property>
+    <property name="numDigits">
+     <number>6</number>
+    </property>
+    <property name="segmentStyle">
+     <enum>QLCDNumber::Flat</enum>
+    </property>
+    <property name="intValue" stdset="0">
+     <number>12</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_11">
+    <property name="geometry">
+     <rect>
+      <x>136</x>
+      <y>110</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>frames:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QWidget" name="meshDataAni" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>190</y>
+      <width>181</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>12</y>
+       <width>71</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Time of frame</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="frameNumber">
+     <property name="geometry">
+      <rect>
+       <x>78</x>
+       <y>7</y>
+       <width>41</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="frame">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="suffix">
+      <string/>
+     </property>
+     <property name="prefix">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="timeOfFrame">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>7</y>
+       <width>41</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string extracomment="flags"/>
+     </property>
+     <property name="statusTip">
+      <string>Time of this frame</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="readOnly">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>121</x>
+       <y>10</y>
+       <width>20</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>:</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="buFlagMes">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>80</y>
+      <width>31</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>...</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="cbMeshHasAni">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>4</x>
+      <y>156</y>
+      <width>91</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Vertex Anim.</string>
+    </property>
+    <property name="tristate">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="cbMeshHasRig">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>94</x>
+      <y>156</y>
+      <width>81</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Rigged</string>
+    </property>
+    <property name="tristate">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="cbMeshHasCol">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>4</x>
+      <y>172</y>
+      <width>91</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Vertex Colors</string>
+    </property>
+    <property name="tristate">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="cbMeshHasTan">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>94</x>
+      <y>172</y>
+      <width>81</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Tangent Dirs</string>
+    </property>
+    <property name="tristate">
+     <bool>true</bool>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="generalView">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>250</y>
+     <width>181</width>
+     <height>361</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="title">
+    <string>View</string>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,0,0,0,0,1">
+    <property name="spacing">
+     <number>1</number>
+    </property>
+    <property name="sizeConstraint">
+     <enum>QLayout::SetMinimumSize</enum>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QWidget" name="viewComparisonMesh" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>15</height>
+       </size>
+      </property>
+      <widget class="QCheckBox" name="cbComparisonMesh">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>0</y>
+         <width>161</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Compare with mesh (M)</string>
+       </property>
+       <property name="shortcut">
+        <string>M</string>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="viewRefSkin" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>25</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>25</height>
+       </size>
+      </property>
+      <widget class="QLabel" name="label">
+       <property name="geometry">
+        <rect>
+         <x>5</x>
+         <y>0</y>
+         <width>61</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Skin:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="cbSkin">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>0</y>
+         <width>101</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="statusTip">
+        <string>Select a reference skin to show (toggle with [space] ).</string>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="viewMeshRendering" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>76</height>
+       </size>
+      </property>
+      <property name="baseSize">
+       <size>
+        <width>0</width>
+        <height>80</height>
+       </size>
+      </property>
+      <widget class="QRadioButton" name="rbNocolor">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>40</y>
+         <width>84</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="statusTip">
+        <string>Show no color (all white).</string>
+       </property>
+       <property name="text">
+        <string>No Color</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="rbVertexcolor">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>0</y>
+         <width>84</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="statusTip">
+        <string>Use vertex color as defined in the BRF file.</string>
+       </property>
+       <property name="text">
+        <string>Vertex Color</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="cbLighting">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>-2</y>
+         <width>72</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="statusTip">
+        <string>Enable disable lighting,</string>
+       </property>
+       <property name="text">
+        <string>Lighting</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="rbRiggingcolor">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>20</y>
+         <width>84</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="statusTip">
+        <string>Show rigging by coloring mesh according to attached bones</string>
+       </property>
+       <property name="text">
+        <string>Rigging Color</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="cbWireframe">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>59</y>
+         <width>72</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="statusTip">
+        <string>Show/hide wireframe.</string>
+       </property>
+       <property name="text">
+        <string>WireFrame</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="cbTexture">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>12</y>
+         <width>81</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="statusTip">
+        <string>Enable disable texture mapping.</string>
+       </property>
+       <property name="text">
+        <string>Texture</string>
+       </property>
+       <property name="shortcut">
+        <string>Ctrl+T</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="cbNormalmap">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>29</y>
+         <width>76</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>BumpMap</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="cbSpecularmap">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>44</y>
+         <width>70</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>SpecMap</string>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="viewFloor" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>15</height>
+       </size>
+      </property>
+      <widget class="QCheckBox" name="cbFloor">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>0</y>
+         <width>72</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="statusTip">
+        <string>Show/hide a floor at Y = 0.</string>
+       </property>
+       <property name="text">
+        <string>Floor</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="viewRuler" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>22</height>
+       </size>
+      </property>
+      <widget class="QSpinBox" name="rulerSpin">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>0</y>
+         <width>41</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="statusTip">
+        <string>Current weapon reach.</string>
+       </property>
+       <property name="maximum">
+        <number>511</number>
+       </property>
+       <property name="value">
+        <number>100</number>
+       </property>
+      </widget>
+      <widget class="QSlider" name="rulerSlid">
+       <property name="geometry">
+        <rect>
+         <x>59</x>
+         <y>1</y>
+         <width>80</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="statusTip">
+        <string>Current weapon reach.</string>
+       </property>
+       <property name="maximum">
+        <number>300</number>
+       </property>
+       <property name="value">
+        <number>100</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="cbRuler">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>0</y>
+         <width>51</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="statusTip">
+        <string>Show ruler to measure weapon reach.</string>
+       </property>
+       <property name="text">
+        <string>Ruler:</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="viewFloatingProbe" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>44</height>
+       </size>
+      </property>
+      <widget class="QCheckBox" name="cbFloatingProbe">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>0</y>
+         <width>121</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Floating Probe XYZ:</string>
+       </property>
+      </widget>
+      <widget class="MyDoubleSpinBox" name="floatingProbeX">
+       <property name="geometry">
+        <rect>
+         <x>28</x>
+         <y>17</y>
+         <width>51</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>Probe Position X</string>
+       </property>
+       <property name="decimals">
+        <number>1</number>
+       </property>
+       <property name="minimum">
+        <double>-100000.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>100000.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>5.000000000000000</double>
+       </property>
+      </widget>
+      <widget class="MyDoubleSpinBox" name="floatingProbeY">
+       <property name="geometry">
+        <rect>
+         <x>78</x>
+         <y>17</y>
+         <width>51</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>Probe Position Y</string>
+       </property>
+       <property name="decimals">
+        <number>1</number>
+       </property>
+       <property name="minimum">
+        <double>-100000.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>100000.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>5.000000000000000</double>
+       </property>
+      </widget>
+      <widget class="MyDoubleSpinBox" name="floatingProbeZ">
+       <property name="geometry">
+        <rect>
+         <x>128</x>
+         <y>17</y>
+         <width>51</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>Probe Position Z</string>
+       </property>
+       <property name="decimals">
+        <number>1</number>
+       </property>
+       <property name="minimum">
+        <double>-100000.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>100000.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>5.000000000000000</double>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="viewRefAni" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>22</height>
+       </size>
+      </property>
+      <widget class="QComboBox" name="cbRefani">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>0</y>
+         <width>101</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="statusTip">
+        <string>Select a reference animation to view rigged meshes.</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_21">
+       <property name="geometry">
+        <rect>
+         <x>5</x>
+         <y>0</y>
+         <width>61</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Animation:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="viewRefSkel" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>23</height>
+       </size>
+      </property>
+      <widget class="QLabel" name="label_23">
+       <property name="geometry">
+        <rect>
+         <x>5</x>
+         <y>0</y>
+         <width>61</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Skeleton:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="cbRefSkel">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>0</y>
+         <width>101</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="statusTip">
+        <string>Select a reference skeleton (e.g. human or horse)</string>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="viewHitboxes" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>14</height>
+       </size>
+      </property>
+      <widget class="QCheckBox" name="cbHitboxes">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>0</y>
+         <width>101</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Hit-Boxes</string>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="viewFloorInAni" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>15</height>
+       </size>
+      </property>
+      <widget class="QCheckBox" name="cbFloorForAni">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>-3</y>
+         <width>179</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Floor &amp;&amp; Shadow</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="viewAni" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>25</height>
+       </size>
+      </property>
+      <widget class="QPushButton" name="buPause">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>4</y>
+         <width>18</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="statusTip">
+        <string>Pause the animation.</string>
+       </property>
+       <property name="text">
+        <string>||</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="buPlay">
+       <property name="geometry">
+        <rect>
+         <x>38</x>
+         <y>4</y>
+         <width>18</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="statusTip">
+        <string>Play the animation.</string>
+       </property>
+       <property name="text">
+        <string>&gt;</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="buStop">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>4</y>
+         <width>18</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="statusTip">
+        <string>Stop the animation.</string>
+       </property>
+       <property name="text">
+        <string>[]</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="buStepF">
+       <property name="geometry">
+        <rect>
+         <x>130</x>
+         <y>4</y>
+         <width>18</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="statusTip">
+        <string>Next frame.</string>
+       </property>
+       <property name="text">
+        <string>&gt;|</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="buStepB">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>4</y>
+         <width>18</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="statusTip">
+        <string>Prev frame.</string>
+       </property>
+       <property name="text">
+        <string>|&lt;</string>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="viewShowAlpha" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>51</height>
+       </size>
+      </property>
+      <widget class="QRadioButton" name="rbAlphaNo">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>0</y>
+         <width>84</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="statusTip">
+        <string>Show RGB channel of texture.</string>
+       </property>
+       <property name="text">
+        <string>&amp;RGB</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="rbAlphaTransparent">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>31</y>
+         <width>131</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="statusTip">
+        <string>Show alpha transparency (alpha = 0 means transparent).</string>
+       </property>
+       <property name="text">
+        <string>Alpha &amp;Transparency</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="rbAlphaColor">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>15</y>
+         <width>84</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="statusTip">
+        <string>Show alpha channel of textures.</string>
+       </property>
+       <property name="text">
+        <string>&amp;Alpha</string>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QGroupBox" name="textureData">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>1060</y>
+     <width>181</width>
+     <height>221</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Data</string>
+   </property>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>4</x>
+      <y>30</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Flags:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="boxTextureFlags">
+    <property name="geometry">
+     <rect>
+      <x>62</x>
+      <y>30</y>
+      <width>78</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string extracomment="flags"/>
+    </property>
+    <property name="statusTip">
+     <string>Texture flags (unknown meaning)</string>
+    </property>
+    <property name="inputMask">
+     <string>000000000000; </string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="readOnly">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_39">
+    <property name="geometry">
+     <rect>
+      <x>108</x>
+      <y>90</y>
+      <width>20</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>x</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_20">
+    <property name="geometry">
+     <rect>
+      <x>4</x>
+      <y>90</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>res:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="boxTextureMipmap">
+    <property name="geometry">
+     <rect>
+      <x>61</x>
+      <y>120</y>
+      <width>46</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="numDigits">
+     <number>5</number>
+    </property>
+    <property name="segmentStyle">
+     <enum>QLCDNumber::Flat</enum>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="boxTextureFileSize">
+    <property name="geometry">
+     <rect>
+      <x>61</x>
+      <y>150</y>
+      <width>46</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Space taken on disk (compressed).</string>
+    </property>
+    <property name="numDigits">
+     <number>5</number>
+    </property>
+    <property name="segmentStyle">
+     <enum>QLCDNumber::Flat</enum>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="boxTextureResY">
+    <property name="geometry">
+     <rect>
+      <x>126</x>
+      <y>90</y>
+      <width>46</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="numDigits">
+     <number>5</number>
+    </property>
+    <property name="segmentStyle">
+     <enum>QLCDNumber::Flat</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_24">
+    <property name="geometry">
+     <rect>
+      <x>4</x>
+      <y>150</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>KBytes:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="boxTextureResX">
+    <property name="geometry">
+     <rect>
+      <x>61</x>
+      <y>90</y>
+      <width>46</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="numDigits">
+     <number>5</number>
+    </property>
+    <property name="segmentStyle">
+     <enum>QLCDNumber::Flat</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_38">
+    <property name="geometry">
+     <rect>
+      <x>4</x>
+      <y>120</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string># mipmap:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="boxTextureFormat">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>62</x>
+      <y>60</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string extracomment="flags"/>
+    </property>
+    <property name="statusTip">
+     <string>Format of dds file on disk.</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_46">
+    <property name="geometry">
+     <rect>
+      <x>4</x>
+      <y>60</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Format:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labBackT">
+    <property name="geometry">
+     <rect>
+      <x>145</x>
+      <y>-2</y>
+      <width>31</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Click to go back to the material.</string>
+    </property>
+    <property name="autoFillBackground">
+     <bool>true</bool>
+    </property>
+    <property name="text">
+     <string>(&lt;a href=&quot;link&quot;&gt;back&lt;/a&gt;)</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_47">
+    <property name="geometry">
+     <rect>
+      <x>4</x>
+      <y>180</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>location:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="boxOrigin">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>61</x>
+      <y>180</y>
+      <width>47</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="browseTextureButton">
+    <property name="geometry">
+     <rect>
+      <x>115</x>
+      <y>179</y>
+      <width>59</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>open it</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="buFlagTex">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>30</y>
+      <width>31</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>...</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labNFrames">
+    <property name="geometry">
+     <rect>
+      <x>116</x>
+      <y>155</y>
+      <width>46</width>
+      <height>13</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="animationData">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>1770</y>
+     <width>181</width>
+     <height>141</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Data</string>
+   </property>
+   <widget class="QLCDNumber" name="boxAniMinFrame">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>80</y>
+      <width>46</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>First frame of the animation.</string>
+    </property>
+    <property name="numDigits">
+     <number>7</number>
+    </property>
+    <property name="segmentStyle">
+     <enum>QLCDNumber::Flat</enum>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="boxAniNBones">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>20</y>
+      <width>46</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Number of bones this animation is made for.</string>
+    </property>
+    <property name="numDigits">
+     <number>7</number>
+    </property>
+    <property name="segmentStyle">
+     <enum>QLCDNumber::Flat</enum>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="boxAniNFrames">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>50</y>
+      <width>46</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Number of frames in this animation.</string>
+    </property>
+    <property name="numDigits">
+     <number>7</number>
+    </property>
+    <property name="segmentStyle">
+     <enum>QLCDNumber::Flat</enum>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="boxAniMaxFrame">
+    <property name="geometry">
+     <rect>
+      <x>129</x>
+      <y>80</y>
+      <width>46</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Last frame of the animation.</string>
+    </property>
+    <property name="numDigits">
+     <number>7</number>
+    </property>
+    <property name="segmentStyle">
+     <enum>QLCDNumber::Flat</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_14">
+    <property name="geometry">
+     <rect>
+      <x>14</x>
+      <y>20</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string># bones:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_15">
+    <property name="geometry">
+     <rect>
+      <x>14</x>
+      <y>50</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string># frames:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_16">
+    <property name="geometry">
+     <rect>
+      <x>14</x>
+      <y>80</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>interval:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_17">
+    <property name="geometry">
+     <rect>
+      <x>113</x>
+      <y>80</y>
+      <width>20</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>-</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QWidget" name="meshDataAni_2" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>103</y>
+      <width>181</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <widget class="QLabel" name="label_12">
+     <property name="geometry">
+      <rect>
+       <x>2</x>
+       <y>11</y>
+       <width>71</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>time of frame</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="frameNumberAni">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>7</y>
+       <width>46</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="statusTip">
+      <string>Frame number (1 = first)</string>
+     </property>
+     <property name="wrapping">
+      <bool>true</bool>
+     </property>
+     <property name="frame">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="suffix">
+      <string/>
+     </property>
+     <property name="prefix">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="timeOfFrameAni">
+     <property name="geometry">
+      <rect>
+       <x>129</x>
+       <y>7</y>
+       <width>46</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string extracomment="flags"/>
+     </property>
+     <property name="statusTip">
+      <string>Time of this frame (must always be increasing)</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="readOnly">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_13">
+     <property name="geometry">
+      <rect>
+       <x>122</x>
+       <y>10</y>
+       <width>20</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>:</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="materialData">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>1280</y>
+     <width>181</width>
+     <height>251</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Data</string>
+   </property>
+   <widget class="QLineEdit" name="leMatShader">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>30</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Shader used by this material.</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leMatDifA">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>60</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Main diffuse (RGB color) texture</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leMatDifB">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>80</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Second diffuse (RGB color) texture</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leMatBump">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>100</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Bumpmap texture</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leMatEnv">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>120</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Environment map texture</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leMatR">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>170</y>
+      <width>37</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Red component of specular color.</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leMatG">
+    <property name="geometry">
+     <rect>
+      <x>97</x>
+      <y>170</y>
+      <width>37</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Green component of specular color.</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leMatB">
+    <property name="geometry">
+     <rect>
+      <x>134</x>
+      <y>170</y>
+      <width>37</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Blue component of specular color.</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_22">
+    <property name="geometry">
+     <rect>
+      <x>-5</x>
+      <y>175</y>
+      <width>61</width>
+      <height>14</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Spec RGB:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leMatSpec">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>140</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Specular map texture.</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_25">
+    <property name="geometry">
+     <rect>
+      <x>-5</x>
+      <y>195</y>
+      <width>61</width>
+      <height>14</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Coeff:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leMatCoeff">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>190</y>
+      <width>37</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Specular coefficient (glossiness). Higher = smaller brighter reflections.</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leMatFlags">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>220</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Flags (click on button to edit bits)</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_26">
+    <property name="geometry">
+     <rect>
+      <x>15</x>
+      <y>225</y>
+      <width>41</width>
+      <height>14</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Flags:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="buFlagMat">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>221</y>
+      <width>31</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>...</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelShader">
+    <property name="geometry">
+     <rect>
+      <x>3</x>
+      <y>34</y>
+      <width>52</width>
+      <height>14</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Click to open file containing shader.</string>
+    </property>
+    <property name="text">
+     <string>&lt;a href=&quot;link&quot;&gt;Shader&lt;/a&gt;:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelDiffuseA">
+    <property name="geometry">
+     <rect>
+      <x>3</x>
+      <y>64</y>
+      <width>52</width>
+      <height>14</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Click to open file containing this texture.</string>
+    </property>
+    <property name="text">
+     <string>&lt;a href=&quot;link&quot;&gt;DiffuseA&lt;/a&gt;:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelDiffuseB">
+    <property name="geometry">
+     <rect>
+      <x>3</x>
+      <y>84</y>
+      <width>52</width>
+      <height>14</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Click to open file containing this texture.</string>
+    </property>
+    <property name="text">
+     <string>&lt;a href=&quot;link&quot;&gt;DiffuseB&lt;/a&gt;:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelBump">
+    <property name="geometry">
+     <rect>
+      <x>3</x>
+      <y>104</y>
+      <width>52</width>
+      <height>14</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Click to open file containing this bumpmap,</string>
+    </property>
+    <property name="text">
+     <string>&lt;a href=&quot;link&quot;&gt;Bump&lt;/a&gt;:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelEnviro">
+    <property name="geometry">
+     <rect>
+      <x>3</x>
+      <y>124</y>
+      <width>52</width>
+      <height>14</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Click to open file containing this environment map.</string>
+    </property>
+    <property name="text">
+     <string>&lt;a href=&quot;link&quot;&gt;Enviro&lt;/a&gt;:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelSpecular">
+    <property name="geometry">
+     <rect>
+      <x>3</x>
+      <y>144</y>
+      <width>52</width>
+      <height>14</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Click to open file containing this specular map.</string>
+    </property>
+    <property name="text">
+     <string>&lt;a href=&quot;link&quot;&gt;Specular&lt;/a&gt;:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labBackM">
+    <property name="geometry">
+     <rect>
+      <x>145</x>
+      <y>-2</y>
+      <width>31</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Click to go back to the mesh.</string>
+    </property>
+    <property name="autoFillBackground">
+     <bool>true</bool>
+    </property>
+    <property name="text">
+     <string>(&lt;a href=&quot;link&quot;&gt;back&lt;/a&gt;)</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="skeletonData">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>1530</y>
+     <width>181</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Data</string>
+   </property>
+   <widget class="QLabel" name="label_27">
+    <property name="geometry">
+     <rect>
+      <x>3</x>
+      <y>16</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string># bones:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="boxSkelNBones">
+    <property name="geometry">
+     <rect>
+      <x>55</x>
+      <y>15</y>
+      <width>21</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Number of bones composing this skeleton.</string>
+    </property>
+    <property name="numDigits">
+     <number>3</number>
+    </property>
+    <property name="segmentStyle">
+     <enum>QLCDNumber::Flat</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>3</x>
+      <y>41</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>bones:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QListView" name="lvBones">
+    <property name="geometry">
+     <rect>
+      <x>56</x>
+      <y>44</y>
+      <width>121</width>
+      <height>81</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="cbSkelHasHitbox">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>93</x>
+      <y>17</y>
+      <width>81</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Has HitBoxes</string>
+    </property>
+    <property name="tristate">
+     <bool>true</bool>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="shaderData">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>790</y>
+     <width>181</width>
+     <height>271</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="title">
+    <string>Data</string>
+   </property>
+   <widget class="QLabel" name="label_28">
+    <property name="geometry">
+     <rect>
+      <x>5</x>
+      <y>35</y>
+      <width>51</width>
+      <height>14</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Technique:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leShaderTechnique">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>30</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Technique: name of the &quot;technique&quot; inside mb.fx file.</string>
+    </property>
+    <property name="whatsThis">
+     <string/>
+    </property>
+    <property name="accessibleName">
+     <string/>
+    </property>
+    <property name="accessibleDescription">
+     <string>Technique: name of the &quot;technique&quot; inside mb.fx file.</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labShaFallback">
+    <property name="geometry">
+     <rect>
+      <x>5</x>
+      <y>95</y>
+      <width>51</width>
+      <height>14</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;a href=&quot;link&quot;&gt;Fallback&lt;/a&gt;:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leShaderFallback">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>90</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Which other shader to use if requirements are not met.</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_30">
+    <property name="geometry">
+     <rect>
+      <x>5</x>
+      <y>125</y>
+      <width>51</width>
+      <height>14</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Flags:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leShaderFlags">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>120</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string extracomment="flags"/>
+    </property>
+    <property name="statusTip">
+     <string>Shader flags (no known meaning).</string>
+    </property>
+    <property name="inputMask">
+     <string>000000000000; </string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="readOnly">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leShaderRequires">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>60</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Specify if a DDX version is required here</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_31">
+    <property name="geometry">
+     <rect>
+      <x>6</x>
+      <y>65</y>
+      <width>51</width>
+      <height>14</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Requires:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>150</y>
+      <width>121</width>
+      <height>111</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>texture access</string>
+    </property>
+    <widget class="QLabel" name="label_33">
+     <property name="geometry">
+      <rect>
+       <x>16</x>
+       <y>20</y>
+       <width>31</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>map:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="leShaderTaMap">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>20</y>
+       <width>61</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="leShaderTaColorOp">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>40</y>
+       <width>61</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="leShaderTaAlphaOp">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>60</y>
+       <width>61</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="leShaderTaFlags">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>80</y>
+       <width>61</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_34">
+     <property name="geometry">
+      <rect>
+       <x>-3</x>
+       <y>40</y>
+       <width>51</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>colorOp:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_35">
+     <property name="geometry">
+      <rect>
+       <x>-3</x>
+       <y>60</y>
+       <width>51</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>alphaOp:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_36">
+     <property name="geometry">
+      <rect>
+       <x>-4</x>
+       <y>80</y>
+       <width>51</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>flags:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QListView" name="lvTextAcc">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>170</y>
+      <width>31</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="contextMenuPolicy">
+     <enum>Qt::CustomContextMenu</enum>
+    </property>
+    <property name="statusTip">
+     <string>Texture access index</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labBackS">
+    <property name="geometry">
+     <rect>
+      <x>145</x>
+      <y>-2</y>
+      <width>31</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>true</bool>
+    </property>
+    <property name="text">
+     <string>(&lt;a href=&quot;link&quot;&gt;back&lt;/a&gt;)</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="buFlagSha">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>120</y>
+      <width>31</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>...</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="buFlagReq">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>60</y>
+      <width>31</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>...</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="bodyData">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>1910</y>
+     <width>181</width>
+     <height>251</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Data</string>
+   </property>
+   <widget class="QListView" name="lvBodyPart">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>16</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="contextMenuPolicy">
+     <enum>Qt::CustomContextMenu</enum>
+    </property>
+    <property name="statusTip">
+     <string>Select a subpiece composing this collision object.</string>
+    </property>
+    <property name="selectionRectVisible">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>115</y>
+      <width>161</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>piece</string>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="margin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QWidget" name="wiBodyRadius" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>27</height>
+        </size>
+       </property>
+       <widget class="QLabel" name="label_41">
+        <property name="geometry">
+         <rect>
+          <x>-20</x>
+          <y>10</y>
+          <width>61</width>
+          <height>14</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>radius:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="leBodyRad">
+        <property name="geometry">
+         <rect>
+          <x>45</x>
+          <y>5</y>
+          <width>56</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="wiBodyAxisA" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>64</height>
+        </size>
+       </property>
+       <widget class="QLineEdit" name="leBodyAZ">
+        <property name="geometry">
+         <rect>
+          <x>45</x>
+          <y>41</y>
+          <width>56</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="leBodyAY">
+        <property name="geometry">
+         <rect>
+          <x>45</x>
+          <y>21</y>
+          <width>56</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="leBodyAX">
+        <property name="geometry">
+         <rect>
+          <x>45</x>
+          <y>1</y>
+          <width>56</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelAxisRadius">
+        <property name="geometry">
+         <rect>
+          <x>1</x>
+          <y>4</y>
+          <width>41</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>X:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+       <widget class="QWidget" name="wiBodyAxisB" native="true">
+        <property name="geometry">
+         <rect>
+          <x>101</x>
+          <y>0</y>
+          <width>60</width>
+          <height>70</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <widget class="QLineEdit" name="leBodyBZ">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>41</y>
+           <width>56</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="leBodyBY">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>21</y>
+           <width>56</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="leBodyBX">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>1</y>
+           <width>56</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QLabel" name="labelAxisRadius_2">
+        <property name="geometry">
+         <rect>
+          <x>1</x>
+          <y>24</y>
+          <width>41</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Y:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelAxisRadius_3">
+        <property name="geometry">
+         <rect>
+          <x>1</x>
+          <y>44</y>
+          <width>41</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Z:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="wiBodyNVerts" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>28</height>
+        </size>
+       </property>
+       <widget class="QLCDNumber" name="leBodyNVert">
+        <property name="geometry">
+         <rect>
+          <x>45</x>
+          <y>4</y>
+          <width>60</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="numDigits">
+         <number>7</number>
+        </property>
+        <property name="segmentStyle">
+         <enum>QLCDNumber::Flat</enum>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_43">
+        <property name="geometry">
+         <rect>
+          <x>-10</x>
+          <y>4</y>
+          <width>51</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>verts:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="wiBodyNFaces" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>27</height>
+        </size>
+       </property>
+       <widget class="QLCDNumber" name="leBodyNFace">
+        <property name="geometry">
+         <rect>
+          <x>45</x>
+          <y>5</y>
+          <width>60</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="numDigits">
+         <number>7</number>
+        </property>
+        <property name="segmentStyle">
+         <enum>QLCDNumber::Flat</enum>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_42">
+        <property name="geometry">
+         <rect>
+          <x>-10</x>
+          <y>4</y>
+          <width>51</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>faces:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="wiBodyFlags" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>27</height>
+        </size>
+       </property>
+       <widget class="QLabel" name="label_44">
+        <property name="geometry">
+         <rect>
+          <x>-20</x>
+          <y>10</y>
+          <width>61</width>
+          <height>14</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>flags:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="leBodyFlags">
+        <property name="geometry">
+         <rect>
+          <x>45</x>
+          <y>5</y>
+          <width>71</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="buFlagBody">
+        <property name="geometry">
+         <rect>
+          <x>118</x>
+          <y>4</y>
+          <width>31</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="wiBodySigns" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>27</height>
+        </size>
+       </property>
+       <widget class="QLabel" name="label_45">
+        <property name="geometry">
+         <rect>
+          <x>-20</x>
+          <y>10</y>
+          <width>61</width>
+          <height>14</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>sign:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="leBodySign">
+        <property name="geometry">
+         <rect>
+          <x>45</x>
+          <y>5</y>
+          <width>29</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="label_37">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>14</y>
+      <width>61</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>piece list:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="hitboxEdit">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>1660</y>
+     <width>181</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Edit Bone Hitbox</string>
+   </property>
+   <widget class="QScrollBar" name="editHbRange">
+    <property name="geometry">
+     <rect>
+      <x>34</x>
+      <y>20</y>
+      <width>16</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Thinkness</string>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_18">
+    <property name="geometry">
+     <rect>
+      <x>-6</x>
+      <y>20</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Size:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QScrollBar" name="editHbLenTop">
+    <property name="geometry">
+     <rect>
+      <x>54</x>
+      <y>20</y>
+      <width>16</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Elnongate from top</string>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QScrollBar" name="editHbLenBot">
+    <property name="geometry">
+     <rect>
+      <x>74</x>
+      <y>20</y>
+      <width>16</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Elongate from bottom</string>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QScrollBar" name="editHbPosX">
+    <property name="geometry">
+     <rect>
+      <x>34</x>
+      <y>50</y>
+      <width>16</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Move front/back</string>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QScrollBar" name="editHbPosY">
+    <property name="geometry">
+     <rect>
+      <x>54</x>
+      <y>50</y>
+      <width>16</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Move left/right</string>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QScrollBar" name="editHbPosZ">
+    <property name="geometry">
+     <rect>
+      <x>74</x>
+      <y>50</y>
+      <width>16</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Move near/far</string>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QScrollBar" name="editHbRotAlpha">
+    <property name="geometry">
+     <rect>
+      <x>34</x>
+      <y>80</y>
+      <width>16</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Pitch</string>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QScrollBar" name="editHbRotBeta">
+    <property name="geometry">
+     <rect>
+      <x>54</x>
+      <y>80</y>
+      <width>16</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Yaw</string>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_19">
+    <property name="geometry">
+     <rect>
+      <x>-6</x>
+      <y>50</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Pos:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_29">
+    <property name="geometry">
+     <rect>
+      <x>-6</x>
+      <y>80</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Rotat:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="editHbActive">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>10</y>
+      <width>61</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Does current bone use a Hit-box?</string>
+    </property>
+    <property name="text">
+     <string>Exists</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="editHitBoxReset">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>48</y>
+      <width>78</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Reset hitbox near to bone</string>
+    </property>
+    <property name="text">
+     <string>Reset</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="editHitBoxSymmetric">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>72</y>
+      <width>78</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Enforce symmetry for this hitbox</string>
+    </property>
+    <property name="text">
+     <string>Apply
+Symmetry</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="editHbRagdollOnly">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>27</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Capsule used only for ragdoll, or also as a hitobx? (warband only)</string>
+    </property>
+    <property name="text">
+     <string>Ragdoll only</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="vertexData">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>640</y>
+     <width>181</width>
+     <height>151</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Vertex Data</string>
+   </property>
+   <widget class="QTabWidget" name="attributeData">
+    <property name="geometry">
+     <rect>
+      <x>1</x>
+      <y>20</y>
+      <width>180</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="tabShape">
+     <enum>QTabWidget::Triangular</enum>
+    </property>
+    <property name="currentIndex">
+     <number>3</number>
+    </property>
+    <property name="elideMode">
+     <enum>Qt::ElideNone</enum>
+    </property>
+    <property name="usesScrollButtons">
+     <bool>false</bool>
+    </property>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>xyz</string>
+     </attribute>
+     <widget class="QCheckBox" name="checkBox">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>10</y>
+        <width>70</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>CheckBox</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_6">
+     <attribute name="title">
+      <string>rgb</string>
+     </attribute>
+     <widget class="QLineEdit" name="attrColorUint">
+      <property name="geometry">
+       <rect>
+        <x>57</x>
+        <y>10</y>
+        <width>61</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="inputMask">
+       <string notr="true">HHHHHHHH; </string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_32">
+      <property name="geometry">
+       <rect>
+        <x>-7</x>
+        <y>10</y>
+        <width>61</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>rrggbbaa:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QSlider" name="attrColorSaturation">
+      <property name="geometry">
+       <rect>
+        <x>58</x>
+        <y>62</y>
+        <width>61</width>
+        <height>19</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QSlider" name="attrColorBrightness">
+      <property name="geometry">
+       <rect>
+        <x>58</x>
+        <y>82</y>
+        <width>61</width>
+        <height>19</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QSlider" name="attrColorHue">
+      <property name="geometry">
+       <rect>
+        <x>58</x>
+        <y>42</y>
+        <width>61</width>
+        <height>19</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="attrColorButton">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>50</y>
+        <width>41</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_40">
+      <property name="geometry">
+       <rect>
+        <x>-7</x>
+        <y>40</y>
+        <width>61</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Hue:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_48">
+      <property name="geometry">
+       <rect>
+        <x>-7</x>
+        <y>60</y>
+        <width>61</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Saturation:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_49">
+      <property name="geometry">
+       <rect>
+        <x>-7</x>
+        <y>80</y>
+        <width>61</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Brighness:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>uv</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>rig</string>
+     </attribute>
+     <widget class="MyDoubleSpinBox" name="attrBoneWeigth0">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>10</y>
+        <width>51</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="decimals">
+       <number>3</number>
+      </property>
+     </widget>
+     <widget class="MyDoubleSpinBox" name="attrBoneWeigth1">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>30</y>
+        <width>51</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="decimals">
+       <number>3</number>
+      </property>
+     </widget>
+     <widget class="MyDoubleSpinBox" name="attrBoneWeigth2">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>50</y>
+        <width>51</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="decimals">
+       <number>3</number>
+      </property>
+     </widget>
+     <widget class="MyDoubleSpinBox" name="attrBoneWeigth3">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>70</y>
+        <width>51</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="decimals">
+       <number>3</number>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="attrBoneIndex0">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>71</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="attrBoneIndex1">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>71</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="attrBoneIndex2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>71</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="attrBoneIndex3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>71</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>10</y>
+        <width>31</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>nor-
+ma-
+li-
+ze</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>n</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="tab_5">
+     <attribute name="title">
+      <string>t</string>
+     </attribute>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MyDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>tablemodel.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>boxMaterial</tabstop>
+  <tabstop>boxTexture</tabstop>
+  <tabstop>boxFlags</tabstop>
+  <tabstop>buFlagMes</tabstop>
+  <tabstop>cbMeshHasAni</tabstop>
+  <tabstop>cbMeshHasRig</tabstop>
+  <tabstop>cbMeshHasCol</tabstop>
+  <tabstop>cbMeshHasTan</tabstop>
+  <tabstop>frameNumber</tabstop>
+  <tabstop>timeOfFrame</tabstop>
+  <tabstop>leShaderTechnique</tabstop>
+  <tabstop>leShaderRequires</tabstop>
+  <tabstop>buFlagReq</tabstop>
+  <tabstop>leShaderFallback</tabstop>
+  <tabstop>leShaderFlags</tabstop>
+  <tabstop>buFlagSha</tabstop>
+  <tabstop>lvTextAcc</tabstop>
+  <tabstop>leShaderTaMap</tabstop>
+  <tabstop>leShaderTaColorOp</tabstop>
+  <tabstop>leShaderTaAlphaOp</tabstop>
+  <tabstop>leShaderTaFlags</tabstop>
+  <tabstop>boxTextureFlags</tabstop>
+  <tabstop>buFlagTex</tabstop>
+  <tabstop>boxTextureFormat</tabstop>
+  <tabstop>boxOrigin</tabstop>
+  <tabstop>browseTextureButton</tabstop>
+  <tabstop>leMatShader</tabstop>
+  <tabstop>leMatDifA</tabstop>
+  <tabstop>leMatDifB</tabstop>
+  <tabstop>leMatBump</tabstop>
+  <tabstop>leMatEnv</tabstop>
+  <tabstop>leMatSpec</tabstop>
+  <tabstop>leMatR</tabstop>
+  <tabstop>leMatG</tabstop>
+  <tabstop>leMatB</tabstop>
+  <tabstop>leMatCoeff</tabstop>
+  <tabstop>leMatFlags</tabstop>
+  <tabstop>buFlagMat</tabstop>
+  <tabstop>cbSkelHasHitbox</tabstop>
+  <tabstop>lvBones</tabstop>
+  <tabstop>editHbActive</tabstop>
+  <tabstop>editHbRagdollOnly</tabstop>
+  <tabstop>editHitBoxReset</tabstop>
+  <tabstop>editHitBoxSymmetric</tabstop>
+  <tabstop>frameNumberAni</tabstop>
+  <tabstop>timeOfFrameAni</tabstop>
+  <tabstop>lvBodyPart</tabstop>
+  <tabstop>leBodyRad</tabstop>
+  <tabstop>leBodyAX</tabstop>
+  <tabstop>leBodyAY</tabstop>
+  <tabstop>leBodyAZ</tabstop>
+  <tabstop>leBodyBX</tabstop>
+  <tabstop>leBodyBY</tabstop>
+  <tabstop>leBodyBZ</tabstop>
+  <tabstop>leBodyFlags</tabstop>
+  <tabstop>buFlagBody</tabstop>
+  <tabstop>leBodySign</tabstop>
+  <tabstop>cbComparisonMesh</tabstop>
+  <tabstop>cbSkin</tabstop>
+  <tabstop>cbLighting</tabstop>
+  <tabstop>cbTexture</tabstop>
+  <tabstop>cbNormalmap</tabstop>
+  <tabstop>cbSpecularmap</tabstop>
+  <tabstop>cbWireframe</tabstop>
+  <tabstop>cbFloor</tabstop>
+  <tabstop>rbVertexcolor</tabstop>
+  <tabstop>rbRiggingcolor</tabstop>
+  <tabstop>rbNocolor</tabstop>
+  <tabstop>cbRuler</tabstop>
+  <tabstop>rulerSlid</tabstop>
+  <tabstop>rulerSpin</tabstop>
+  <tabstop>cbFloatingProbe</tabstop>
+  <tabstop>floatingProbeX</tabstop>
+  <tabstop>floatingProbeY</tabstop>
+  <tabstop>floatingProbeZ</tabstop>
+  <tabstop>cbRefani</tabstop>
+  <tabstop>cbRefSkel</tabstop>
+  <tabstop>cbHitboxes</tabstop>
+  <tabstop>buPlay</tabstop>
+  <tabstop>buPause</tabstop>
+  <tabstop>buStop</tabstop>
+  <tabstop>buStepB</tabstop>
+  <tabstop>buStepF</tabstop>
+  <tabstop>rbAlphaNo</tabstop>
+  <tabstop>rbAlphaColor</tabstop>
+  <tabstop>rbAlphaTransparent</tabstop>
+  <tabstop>attributeData</tabstop>
+  <tabstop>checkBox</tabstop>
+  <tabstop>attrColorUint</tabstop>
+  <tabstop>attrColorSaturation</tabstop>
+  <tabstop>attrColorBrightness</tabstop>
+  <tabstop>attrColorHue</tabstop>
+  <tabstop>attrColorButton</tabstop>
+  <tabstop>attrBoneWeigth0</tabstop>
+  <tabstop>attrBoneWeigth1</tabstop>
+  <tabstop>attrBoneWeigth2</tabstop>
+  <tabstop>attrBoneWeigth3</tabstop>
+  <tabstop>attrBoneIndex0</tabstop>
+  <tabstop>attrBoneIndex1</tabstop>
+  <tabstop>attrBoneIndex2</tabstop>
+  <tabstop>attrBoneIndex3</tabstop>
+  <tabstop>pushButton</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

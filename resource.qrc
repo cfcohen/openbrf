@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>openBrf.ico</file>
+        <file>translations/openbrf_zh.qm</file>
+        <file>translations/qt_es.qm</file>
+        <file>translations/qt_zh_CN.qm</file>
+        <file>translations/openbrf_de.qm</file>
+        <file>femininizer.morpher</file>
+        <file>shaders/iron_fragment.cpp</file>
+        <file>shaders/bump_vertex.cpp</file>
+        <file>shaders/bump_fragment.cpp</file>
+        <file>icons/ico_left.png</file>
+        <file>icons/ico_mid.png</file>
+        <file>icons/ico_right.png</file>
+        <file>translations/openbrf_es.qm</file>
+        <file>carry_positions.txt</file>
+    </qresource>
+</RCC>
