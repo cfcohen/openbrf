@@ -1,0 +1,4 @@
+*.o
+*~
+tmp
+qrc_resource.cpp
