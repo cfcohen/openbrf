@@ -14,6 +14,7 @@ using namespace vcg;
 #include "brfMesh.h"
 #include "brfSkeleton.h"
 #include "brfAnimation.h"
+#include "platform.h"
 
 #include "ioMB.h"
 
@@ -312,7 +313,7 @@ static void writeEdge(const Edge &e){
 static void ioMB_exportRigging(const BrfMesh &m){
   fprintf(f,
     "createNode skinCluster -n \"%s_skin\";\n"
-    "\tsetAttr -s %d \".wl\";\n"
+    "\tsetAttr -s %ld \".wl\";\n"
     ,m.name, m.rigging.size()
   );
   for (unsigned int i=0; i<m.rigging.size(); i++) {
@@ -391,10 +392,10 @@ static void ioMB_exportMesh(const BrfMesh &m, int fr){
   fprintf(f,
     "\tsetAttr -k off \".v\";\n"
     "\tsetAttr \".io\" yes;\n"
-    "\tsetAttr \".iog[0].og[0].gcl\" -type \"componentList\" 1 \"f[0:%d]\";\n"
+    "\tsetAttr \".iog[0].og[0].gcl\" -type \"componentList\" 1 \"f[0:%ld]\";\n"
     "\tsetAttr \".uvst[0].uvsn\" -type \"string\" \"%s\";\n"
-    "\tsetAttr -s %d \".uvst[0].uvsp\";\n"
-    "\tsetAttr \".uvst[0].uvsp[0:%d]\" -type \"float2\"",
+    "\tsetAttr -s %ld \".uvst[0].uvsp\";\n"
+    "\tsetAttr \".uvst[0].uvsp[0:%ld]\" -type \"float2\"",
     m.face.size()-1,m.material,  m.vert.size(), m.vert.size()-1
   );
 
@@ -410,8 +411,8 @@ static void ioMB_exportMesh(const BrfMesh &m, int fr){
   );
   // positions
   fprintf(f,
-    "\tsetAttr -s %d \".vt\";\n"
-    "\tsetAttr \".vt[0:%d]\"",
+    "\tsetAttr -s %ld \".vt\";\n"
+    "\tsetAttr \".vt[0:%ld]\"",
     m.frame[fr].pos.size(),m.frame[fr].pos.size()-1
   );
   for (unsigned int i=0,k=2; i<m.frame[fr].pos.size(); i++,k+=3) {
@@ -454,8 +455,8 @@ static void ioMB_exportMesh(const BrfMesh &m, int fr){
 
 
   fprintf(f,
-    "\tsetAttr -s %d \".ed\";\n"
-    "\tsetAttr \".ed[0:%d]\"",
+    "\tsetAttr -s %ld \".ed\";\n"
+    "\tsetAttr \".ed[0:%ld]\"",
     tmped.size(),tmped.size()-1
   );
   for (unsigned int i=0,k=2; i<tmped.size(); i++,k+=3){
@@ -482,8 +483,8 @@ static void ioMB_exportMesh(const BrfMesh &m, int fr){
 
   // faces
   fprintf(f,
-    "\tsetAttr -s %d \".fc\";\n"
-    "\tsetAttr \".fc[0:%d]\" -type \"polyFaces\"\n" ,
+    "\tsetAttr -s %ld \".fc\";\n"
+    "\tsetAttr \".fc[0:%ld]\" -type \"polyFaces\"\n" ,
     m.face.size(), m.face.size()-1
   );
   for (unsigned int i=0,k=4; i<m.face.size(); i++,k+=3) {
@@ -523,7 +524,7 @@ static int ioMB_importRigging(BrfMesh &m){
   m.rigging.resize(max);
   //qDebug("Start...");
 
-  int last = 0;
+  //int last = 0;
 
   while (nextSetAttr()) {
     QString t =  token();
@@ -553,7 +554,7 @@ static int ioMB_importRigging(BrfMesh &m){
 
 
        //if ((n!=last) && (n!=last+1)) qDebug("From %d to %d",last,n);
-       last = n;
+       //last = n;
      }
 
      if (!expect(";")) return false;
@@ -630,11 +631,11 @@ static bool ioMB_importMesh(BrfMesh &m ){
         }
 
         //if (!expect("3")) return false;
-        int e0, e1, e2, e3, tc0, tc1, tc2, tc3;
+        int e0, e1, e2, /*e3,*/ tc0, tc1, tc2, tc3;
         e0 = readInt();
         e1 = readInt();
         e2 = readInt();
-        if (ne==4) e3 = readInt();
+        if (ne==4) readInt();
         //fprintf(debug,"%d [%d %d %d]\n",i,e0,e1,e2); fflush(debug);
         if (!expect("mu")) return false;
         if (!expect("0")) return false;
@@ -673,6 +674,7 @@ static bool ioMB_importMesh(BrfMesh &m ){
         v0 = vcount++;
         v1 = vcount++;
         v2 = vcount++;
+        v3 = 0; // What was really intended when ne!=4? 
         if (ne==4) v3 = vcount++;
 
         //m.face[fcount]=BrfFace(v0,v1,v2);
@@ -763,7 +765,7 @@ static void ioMB_exportSkeleton(const BrfSkeleton &s){
 }
 
 bool IoMB::Export(const wchar_t*filename, const BrfMesh &m , const BrfSkeleton &s, int fi){
-  f = _wfopen(filename,L"wt");
+  f = wfopen(filename,"wt");
   if (!f) return false;
   ioMB_exportHeader();
   ioMB_exportSkeleton(s);
@@ -859,10 +861,10 @@ static bool ioMB_importBone(BrfSkeleton &s ){
 
 
 bool IoMB::Import(const wchar_t*filename, std::vector<BrfMesh> &m , BrfSkeleton &s, int want){
-  debug=_wfopen(L"debug.txt",L"w");
+  debug=wfopen(L"debug.txt","w");
 
   lastErr = QString("Unkonwn error??");
-  f = _wfopen(filename,L"rb"); lineN=0;
+  f = wfopen(filename,"rb"); lineN=0;
   if (!f) {
     lastErr =QString("cannot open file '%1' for reading").arg(QString::fromStdWString(filename));
     return false;

@@ -5,6 +5,7 @@
 #include <string.h>
 //#include <strings>
 #include <vector>
+#include <stdexcept>
 
 #include <vcg/space/point4.h>
 #include <vcg/space/point3.h>
@@ -76,14 +77,14 @@ void SaveVector(FILE *f,const std::vector<Point3f> &v){
 
 bool LoadStringMaybe(FILE *f, char *st, const char *ifnot){
   unsigned int x;
-  fread(&x, 4, 1,  f);
+  if (fread(&x, 4, 1,  f) != 1) throw std::runtime_error("Read 1 in LoadStringMaybe() failed.");
   if (x<99 && x>0) {
-    fread(st, 1, x, f);
+    if (fread(st, 1, x, f) != x) throw std::runtime_error("Read 2 in LoadStringMaybe() failed.");
     st[x]=0;
     return true;
   } else {
     fseek(f,-4,SEEK_CUR);
-    sprintf(st,ifnot);
+    sprintf(st,"%s",ifnot);
     return false;
   }
 
@@ -91,10 +92,10 @@ bool LoadStringMaybe(FILE *f, char *st, const char *ifnot){
 
 bool LoadString(FILE *f, char *st){
   unsigned int x;
-  fread(&x, 4, 1,  f);
+  if (fread(&x, 4, 1,  f) != 1) throw std::runtime_error("Read 1 in LoadString() failed.");
   if (x>=256) return false;
 
-  fread(st, 1, x, f);
+  if (fread(st, 1, x, f) != x) throw std::runtime_error("Read 2 in LoadString() failed.");
   st[x]=0;
   
  //printf("\"%s\"...\n",st);
@@ -102,27 +103,27 @@ bool LoadString(FILE *f, char *st){
 }
 
 void LoadInt(FILE *f, int &i){
-  fread(&i, 4, 1,  f);
+  if (fread(&i, 4, 1,  f) != 1) throw std::runtime_error("Read in LoadInt() failed.");
   //printf("%d ",i);
 }
 
 
 void LoadByte(FILE *f, unsigned char &i){
-  fread(&i, 1, 1,  f);
+  if (fread(&i, 1, 1,  f) != 1) throw std::runtime_error("Read in LoadByte() failed.");
   //printf("%d ",i);
 }
 
 void LoadFloat(FILE *f, float &x){
-  fread(&x, 4, 1,  f);
+  if (fread(&x, 4, 1,  f) != 1) throw std::runtime_error("Read in LoadFloat() failed.");
 }
 
 void LoadUint(FILE *f, unsigned int &x){
-  fread(&x, 4, 1,  f);
+  if (fread(&x, 4, 1,  f) != 1) throw std::runtime_error("Read in LoadUint() failed.");
   //printf("%ud ",x);
 }
 
 void LoadShort(FILE *f, short int &x){
-  fread(&x, 2, 1,  f);
+  if (fread(&x, 2, 1,  f) != 1) throw std::runtime_error("Read in LoadShort() failed.");
   //printf("%ud ",x);
 }
 

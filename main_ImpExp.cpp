@@ -61,16 +61,16 @@ void MainWindow::meshComputeLod(){
     QString partname = st;
     QString partnumber = st;
     if (st.contains(".lod")) continue; // don't relod
-    int k = st.lastIndexOf('.');
-    if (k!=-1) {
-      partname.truncate(k);
-      partnumber = st.right(st.length()-k-1);
+    int kk = st.lastIndexOf('.');
+    if (kk!=-1) {
+      partname.truncate(kk);
+      partnumber = st.right(st.length()-kk-1);
       bool ok;
       partnumber.toInt(&ok);
-      if (!ok) k=-1;
+      if (!ok) kk=-1;
       partnumber = QString(".")+partnumber;
     }
-    if (k==-1) {
+    if (kk==-1) {
       partname = st;
       partnumber.clear();
     }
@@ -707,7 +707,7 @@ bool MainWindow::reimportAnimation(){
 
 
 
-bool MainWindow::_importStaticMesh(QString s, std::vector<BrfMesh> &mV, std::vector<bool> &wasMultipleMatV, bool onlyOneFile){
+bool MainWindow::_importStaticMesh(QString /*s*/, std::vector<BrfMesh> &mV, std::vector<bool> &wasMultipleMatV, bool onlyOneFile){
   QStringList fnList = askImportFilenames(
     tr("mesh file ("
       "*.obj "
@@ -847,7 +847,7 @@ bool MainWindow::reimportMesh(){
 	BrfMesh &newMesh = m[0];
 
 	//if (!VcgMesh::gotMaterialName()) // let's do that anyway
-  sprintf(newMesh.material,oldMesh.material);
+        sprintf(newMesh.material,"%s",oldMesh.material);
 
 	if (!VcgMesh::gotColor()) newMesh.CopyVertColors(oldMesh);
 
@@ -960,7 +960,7 @@ bool MainWindow::importMovingMeshFrame(){
     statusBar()->showMessage(tr("Import failed"),5000);
     return false;
   }
-  bool allOk = true;
+  //bool allOk = true;
   int N = m.size();
   for (int h=0; h<N; h++) {
     bool res=false;
@@ -971,7 +971,7 @@ bool MainWindow::importMovingMeshFrame(){
           .arg(m[h].name)
           ,7000
       );
-      allOk = false;
+      //allOk = false;
     }
     if (assembleAniMode()==2) {
       res = brfdata.mesh[i].AddFrameMatchPosOrDie(m[h],j);

@@ -14,8 +14,8 @@
 //#include <vcg/complex/trimesh/clean.h>
 
 
-#include "vcgexport.h"
-#include "vcgimport.h"
+#include "vcgExport.h"
+#include "vcgImport.h"
 //#include <wrap/io_trimesh/import.h>
 //#include <wrap/io_trimesh/export.h>
 
@@ -356,7 +356,8 @@ static Color4b Int2Col(unsigned int h){
 
 static unsigned int Col2Int(const Color4b & c){
   unsigned char b[4]={c[2],c[1],c[0],c[3]};
-  return * ((unsigned int*)b);
+  uint32_t x = (uint32_t)*b;
+  return x;
 /*  return (((unsigned int)(c[3]))<<24) + (((unsigned int)(c[1]))<<16) +
          (((unsigned int)(c[2]))<< 8) + ((unsigned int)(c[0]));*/
 }
@@ -592,7 +593,7 @@ void VcgMesh::add(const BrfMesh &b, int fi){
 #else
 #if 1
   // one vcg::vert per brf::vert
-  CMesh::VertexIterator v=vcg::tri::Allocator<CMesh>::AddVertices( mesh , b.vert.size() );
+  // CMesh::VertexIterator v=vcg::tri::Allocator<CMesh>::AddVertices( mesh , b.vert.size() );
   int k=0;
   for (CMesh::FaceIterator f=mesh.face.begin(); f!=mesh.face.end(); f++,k++) {
     for (int h=0; h<3; h++) {

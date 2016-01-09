@@ -813,7 +813,7 @@ void GLWidget::renderBrfItem(const BrfSkeleton& p){
 	if (selRefAnimation>=0) a = &(reference->animation[selRefAnimation]);
 	float frameNum = (!a)?0:floatMod( relTime*runningSpeed , a->frame.size());
 
-	bool skinRendered = false;
+	// bool skinRendered = false;
 	// draw skin
 	if (selRefSkin>=0) {
 		if (!b) ghostMode=true;
@@ -823,7 +823,7 @@ void GLWidget::renderBrfItem(const BrfSkeleton& p){
 			if (reference->mesh[i].name[4]==skinIdeChar) {
 				if (a) renderRiggedMesh(reference->mesh[i],p,*a,frameNum);
 				else renderMesh(reference->mesh[i],0);
-				skinRendered = true;
+				//skinRendered = true;
 			}
 		}
 		ghostMode=false;
@@ -987,10 +987,10 @@ void GLWidget::setDummyNormTexture(){
 
 bool GLWidget::fixTextureFormat(QString st){
 
-	FILE* f = _wfopen(st.toStdWString().c_str(),L"rb");
+	FILE* f = wfopen(st.toStdWString().c_str(),"rb");
 	if (!f) return false;
 	unsigned int h[22]; // header
-	fread(h,4 , 22,f); // 4 = sizeof uint
+	if (fread(h,4 , 22,f) != 22) throw std::runtime_error("Read 1 in fixTextureFormat() failed!"); // 4 = sizeof uint
 	if (h[0]!=0x20534444) {fclose(f); return false;}// "DDS "
 	bool dxt1 = (h[21] ==  0x31545844);
 	bool dxt5 = (h[21] ==  0x35545844);
@@ -2674,7 +2674,7 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *event){
-	QPoint nowPos = event->pos();
+        //QPoint nowPos = event->pos();
 	if (!mouseMoved) mouseClickEvent(event);
 }
 

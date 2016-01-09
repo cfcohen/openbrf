@@ -3,6 +3,8 @@
 #ifndef BINDTEXTUREPATCH_H
 #define BINDTEXTUREPATCH_H
 
+#include "platform.h"
+
 // DDS format structure
 struct DDSFormat {
     quint32 dwSize;
@@ -77,13 +79,13 @@ bool loadDDSHeader(QFile &f, DdsData &data,  DDSFormat &ddsHeader){
 
 
 
-  int factor =4;
+  //int factor =4;
   switch(ddsHeader.ddsPixelFormat.dwFourCC) {
   default:
       qWarning("QGLContext::bindTexture() DDS image format not supported.");
       return false;
   case FOURCC_DXT1:
-      factor = 2;
+    //factor = 2;
       data.ddxversion=1;
 
       break;
@@ -101,11 +103,11 @@ bool loadDDSHeader(QFile &f, DdsData &data,  DDSFormat &ddsHeader){
   data.mipmap=ddsHeader.dwMipMapCount;
 
 
-  int bufferSize;
-  if (ddsHeader.dwMipMapCount > 1)
-      bufferSize = ddsHeader.dwLinearSize * factor;
-  else
-      bufferSize = ddsHeader.dwLinearSize;
+  //int bufferSize;
+  //if (ddsHeader.dwMipMapCount > 1)
+  //    bufferSize = ddsHeader.dwLinearSize * factor;
+  //else
+  //    bufferSize = ddsHeader.dwLinearSize;
 
   data.filesize= f.size(); //bufferSize+4+sizeof(ddsHeader);
   data.sx = ddsHeader.dwWidth;

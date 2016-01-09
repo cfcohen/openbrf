@@ -15,7 +15,7 @@ using namespace std;
 #include "brfBody.h"
 
 #include "saveLoad.h"
-
+#include "platform.h"
 
 static float values[16] = {
   0, 0,  1, 0,
@@ -290,7 +290,7 @@ bool BrfBone::Skip(FILE *f){
   return true;
 }
 
-bool BrfBone::Load(FILE*f, int verbose){
+bool BrfBone::Load(FILE*f, int /*verbose*/){
   LoadInt(f, attach);
 
   if (LoadStringMaybe(f, name, "bone")) // for back compatibility!!!
@@ -378,8 +378,8 @@ void BrfSkeleton::BuildTree(){
 
 
 void BrfSkeleton::Export(const wchar_t* fn){
-  FILE* f = _wfopen(fn,L"wt");
-  fprintf(f,"%s -- %d bones:\n",name,bone.size());
+  FILE* f = wfopen(fn,"wt");
+  fprintf(f,"%s -- %ld bones:\n",name,bone.size());
   for (unsigned int i=0; i<bone.size(); i++){
     fprintf(f,"\n (%d) ",i);
     bone[i].Export(f);

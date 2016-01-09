@@ -3,6 +3,7 @@
 #include "brfData.h"
 
 #include "saveLoad.h"
+#include "platform.h"
 
  const char * tokenBrfName[N_TOKEN] = {
   "mesh",
@@ -69,7 +70,7 @@ const char* BrfData::GetAllObjectNamesAsSceneProps(int *nFound, int *nFoundWithB
 		if (hasBody) (*nFoundWithB)++;
 		c.append(fullstr);
 
-		sprintf(lastName,mesh[i].baseName);
+		sprintf(lastName,"%s",mesh[i].baseName);
 
 	}
 	if (!*nFound) return NULL;
@@ -209,7 +210,7 @@ void  BrfData::Merge(const BrfData& b){
 
 
 bool BrfData::Load(const wchar_t *filename,int verbose, int imposeVersion){
-  FILE *f = _wfopen(filename,L"rb");
+  FILE *f = wfopen(filename,"rb");
   if (!f) return false;
   return Load(f, verbose, imposeVersion);
 }
@@ -253,7 +254,7 @@ bool BrfData::Save(FILE *f) const{
 
 bool BrfData::Save(const wchar_t*fn) const{
 
-  FILE *f = _wfopen(fn,L"wb");
+  FILE *f = wfopen(fn,"wb");
   if (!f) return false;
 
   Save(f);
@@ -351,7 +352,7 @@ bool BrfData::Load(FILE*f,int verbose,int imposeVers){
 
 
 bool BrfData::LoadFast(const wchar_t*filename, bool faster){
-  FILE *f = _wfopen(filename,L"rb");
+  FILE *f = wfopen(filename,"rb");
   if (!f) return false;
 
   version = 0;

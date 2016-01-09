@@ -4,39 +4,25 @@
 #include "mainwindow.h"
 
 static void showUsage(){
-  system(
-    "echo off&"
-    "echo off&"
-    "echo.usages: &"
-    "echo.&"
-    "echo.  OpenBRF &"
-    "echo.     ...starts GUI&"
-    "echo.&"
-    "echo.  OpenBRF ^<file.brf^> &"
-    "echo.     ...starts GUI, opens file.brf&"
-    "echo.&"
-    "echo.  OpenBRF --dump ^<module_path^> ^<file.txt^>&"
-    "echo.     ...shell only, dumps objects names into file.txt&"
-    "echo.&"
-    "echo.&"
-    "pause"
-  );
-
+  printf("usage:\n");
+  printf("OpenBRF\n");
+  printf("  ... startsGUI\n");
+  printf("OpenBRF <file.brf>\n");
+  printf("  ... starts GUI, opens file.brf\n");
+  printf("OpenBRF --dump <module_path> <file.txt>\n");
+  printf("  ... shell only, dumps objects names into file.txt\n");
 }
 
 extern char* applVersion;
 
-int main(int argc, char* argv[])
+int main(int argc, char** argv)
 {
 
   Q_INIT_RESOURCE(resource);
 
   QString nextTranslator;
 
-
-  char* argv_2[]={"OpenBrf"}; int argc_2=1;
-
-  QApplication app(argc_2,argv_2); //argc, argv);
+  QApplication app(argc,argv); //argc, argv);
   QStringList arguments = QCoreApplication::arguments();
   app.setApplicationVersion(applVersion);
   app.setApplicationName("OpenBrf");
@@ -49,9 +35,9 @@ int main(int argc, char* argv[])
   if ((arguments.size()>1)&&(arguments[1].startsWith("-"))) {
     if ((arguments[1] == "--dump")&&(arguments.size()==4)) {
       switch (MainWindow().loadModAndDump(arguments[2],arguments[3])) {
-      case -1: system("echo OpenBRF: invalid module folder & pause"); break;
-      case -2: system("echo OpenBRF: error scanning brf data or ini file & pause"); break;
-      case -3: system("echo OpenBRF: error writing output file & pause"); break;
+      case -1: printf("OpenBRF: invalid module folder\n"); break;
+      case -2: printf("OpenBRF: error scanning brf data or ini file\n"); break;
+      case -3: printf("OpenBRF: error writing output file\n"); break;
       default: return 0;
       }
       return -1;

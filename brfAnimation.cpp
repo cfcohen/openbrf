@@ -7,11 +7,12 @@
 #include <vcg/space/point2.h>
 using namespace vcg;
 #include "saveLoad.h"
+#include "platform.h"
 
 #include "brfSkeleton.h"
 #include "brfAnimation.h"
 
-void BrfAnimationFrame::AddBoneHack(int copyfrom){
+void BrfAnimationFrame::AddBoneHack(int /*copyfrom*/){
   /*int i=copyfrom;
   rot.push_back(rot[i]);
   wasImplicit.push_back(wasImplicit[i]);*/
@@ -34,10 +35,10 @@ void BrfAnimation::AddBoneHack(int copyfrom){
   //nbones++;
 }
 
-void BrfAnimation::ResampleOneEvery(int nFrames){
+void BrfAnimation::ResampleOneEvery(unsigned int nFrames){
 	std::vector<BrfAnimationFrame> oldFrame = frame;
 	frame.clear();
-	for (int i=0; i<oldFrame.size(); i+=nFrames) {
+	for (unsigned int i=0; i<oldFrame.size(); i+=nFrames) {
 		frame.push_back( oldFrame[i] );
 	}
 }
@@ -575,24 +576,26 @@ bool BrfAnimation::Merge(const BrfAnimation& a, const BrfAnimation& b){
 static bool myReadline(FILE* f, char*res, int max){
   int i;
   for (i=0; i<max-1; i++) {
-    char c; fscanf(f,"%c",&c); if (c=='\n') break;
+    char c;
+    if (fscanf(f,"%c",&c) != 1) throw std::runtime_error("Fscanf in myReadline() failed!");
+    if (c=='\n') break;
     res[i]=c;
   }
   res[i]=0;
   return true;
 }
 
-int BrfAnimation::Break(vector<BrfAnimation> &vect, const wchar_t* fn, wchar_t *fn2) const{
+int BrfAnimation::Break(vector<BrfAnimation> &vect, const wchar_t* fn, wchar_t */*fn2*/) const{
 
   int res=0;
-  FILE *fin=_wfopen(fn,L"rt");
+  FILE *fin=wfopen(fn,"rt");
   //static char fn2[1024];
   //swprintf(fn2,L"%ls [after splitting %s].txt",fn,name);
-  //FILE *fout=_wfopen(fn2,L"wt");
+  //FILE *fout=wfopen(fn2,"wt");
   if (!fin) return -1;
   //if (!fout) return -2;
   int n=0;
-  fscanf(fin,"%d ",&n);
+  if (fscanf(fin,"%d ",&n) != 1) throw std::runtime_error("Fscanf 1 in BrfAnimation::Break() failed!");
   //fprintf(fout,"%d \n",n);
 
   char aniName[255];
@@ -623,7 +626,8 @@ int BrfAnimation::Break(vector<BrfAnimation> &vect, const wchar_t* fn, wchar_t *
       BrfAnimation ani;
       //ani.flags=flags;
       ani.nbones=nbones;
-      fscanf   (fin, formatAni,&speed,aniSubName,&ia,&ib,&flags,&v0,&v1,&v2,&v3,&v4);
+      if (fscanf   (fin, formatAni,&speed,aniSubName,&ia,&ib,&flags,&v0,&v1,&v2,&v3,&v4) != 10)
+        throw std::runtime_error("Fscanf 2 in BrfAnimation::Break() failed!");
       if (!strcmp(aniSubName,name) && (ia!=0 || ib!=1) ) {
         if (nparts>1) sprintf(ani.name, "%s_%s_%d",name, aniName,j+1);
         else sprintf(ani.name, "%s_%s",name, aniName);
@@ -738,8 +742,8 @@ void BrfAnimation::Save(FILE *f) const{
 }
 
 void BrfAnimation::Export(const wchar_t* fn){
-  FILE* f = _wfopen(fn,L"wt");
-  fprintf(f,"%s -- %d bones  %u frames...\n",name, nbones,frame.size());
+  FILE* f = wfopen(fn,"wt");
+  fprintf(f,"%s -- %d bones  %lu frames...\n",name, nbones,frame.size());
   for (unsigned int j=0; j<frame.size(); j++) {
     for (int i=0; i<nbones; i++) {
 

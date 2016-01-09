@@ -79,7 +79,7 @@ QVariant MyTableModel::data(const QModelIndex &index, int role) const
   return QVariant();
 }
 
-QVariant MyTableModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant MyTableModel::headerData(int /*section*/, Qt::Orientation /*orientation*/, int /*role*/) const
 {
   return tr("HEADER");
 

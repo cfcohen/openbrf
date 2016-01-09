@@ -105,7 +105,7 @@ void MainWindow::optionAutoFixTextureShowInfo(){
 
 }
 
-bool MainWindow::askIfUseOpenGL2(bool e){
+bool MainWindow::askIfUseOpenGL2(bool /*e*/){
 	QMessageBox::information(this,"OpenBrf",tr("Activating preview Shaders\n(can be disabled under Settings)"));
 	return true;
 	/*
@@ -170,7 +170,7 @@ void MainWindow::aboutCheckboard(){
   QString mot;
   QString longmot;
   QString cure;
-  bool ingame;
+  //bool ingame;
   switch (t){
   case 1:
     mot = QString(tr("I don't know what the material <i>\"%1\"</i> is.")).arg(glWidget->lastMatErr.matName);
@@ -184,7 +184,7 @@ void MainWindow::aboutCheckboard(){
                    "- (note the <i>mod</i> part)!<br>"
                    "- save module.ini<br>"
                    "- come back, and refresh Module [f5]"));
-    ingame=true;
+    //ingame=true;
     break;
   case 2:
     mot = QString(tr("I cannot find the file \"%1\" on disk.")).arg(glWidget->lastMatErr.texName);
@@ -200,7 +200,7 @@ void MainWindow::aboutCheckboard(){
                    "<br>- make sure the missing texture file in mod texture folder!"
                    "<br>- put it there if it is missing")
                    );
-    ingame=true;
+    //ingame=true;
     break;
   case 3:
     mot = QString(tr("I cannot understand the texture format of  file \"%1\".")).arg(glWidget->lastMatErr.texName);
@@ -208,7 +208,7 @@ void MainWindow::aboutCheckboard(){
                       "But some kinds of DXT1 texture confuse me, and too big textures too.<br>Also, if graphic drivers are not up to date, I might ignore how to intepret DXT formats."
                       ));
     cure = QString(tr("Try updating the drivers. Else, maybe just accept the fact... it should still show the texture in game."));
-    ingame=false;
+    //ingame=false;
   }
   //if (t!=0)
 	QMessageBox::about(this, "OpenBrf",

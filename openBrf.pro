@@ -7,6 +7,10 @@ QT += xml
 
 CONFIG += exceptions
 
+QMAKE_CXXFLAGS += -std=c++0x
+#QMAKE_CXXFLAGS += -Werror
+VCGLIB = /home/cory/Source/VCGLib
+QMAKE_CXXFLAGS += "-isystem $$VCGLIB"
 
 # RC_FILE = openBrf.rc
 TARGET = openBrf
@@ -28,8 +32,8 @@ SOURCES += main.cpp \
     guipanel.cpp \
     vcgmesh.cpp \
     askBoneDialog.cpp \
-    C:/projects/vcglib/wrap/ply/plylib.cpp \
-    C:/projects/vcglib/wrap/dae/xmldocumentmanaging.cpp \
+    $$VCGLIB/wrap/ply/plylib.cpp \
+    $$VCGLIB/wrap/dae/xmldocumentmanaging.cpp \
     ioSMD.cpp \
     askSkelDialog.cpp \
     askTexturenameDialog.cpp \
@@ -45,6 +49,7 @@ SOURCES += main.cpp \
     main_ImpExp.cpp \
     brfHitBox.cpp \
     ioMD3.cpp \
+    platform.cpp \
     askNewUiPictureDialog.cpp \
     askSelectBrfDialog.cpp \
     askUnrefTextureDialog.cpp \
@@ -115,9 +120,9 @@ FORMS += guipanel.ui \
     askLodOptionsDialog.ui \
     askUvTransformDialog.ui \
     askSkelPairDialog.ui
-INCLUDEPATH += "C:/projects/vcglib"
-INCLUDEPATH += "C:/libs/lib3ds-1.3.0"
-INCLUDEPATH += "./"
+//INCLUDEPATH += "$$VCGLIB"
+INCLUDEPATH += "lib3ds-1.3.0"
+INCLUDEPATH += "."
 RESOURCES += resource.qrc
 TRANSLATIONS += translations/openbrf_zh.ts
 TRANSLATIONS += translations/openbrf_en.ts
@@ -128,11 +133,12 @@ win32 {
     DEFINES += NOMINMAX
     DEFINES += _CRT_SECURE_NO_DEPRECATE
 }
-INCLUDEPATH += "C:\projects\libraries\include"
 DEFINES += GLEW_STATIC
 
-SOURCES += "C:\projects\libraries\sources\glew-1.5.3\src\glew.c"
+#SOURCES += "C:\projects\libraries\sources\glew-1.5.3\src\glew.c"
 #LIBS += -L"C:\projects\libraries\lib" \
+LIBS += "-lGLEW"
+LIBS += "-lGLU"
 #   % -lglew32
 MOC_DIR = tmp
 UI_DIR = tmp

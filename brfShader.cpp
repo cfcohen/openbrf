@@ -21,7 +21,7 @@ BrfShader::BrfShader()
 }
 //FILE *fff=wfopen("prova.txt","wt");
 
-bool BrfShaderOpt::Load(FILE*f, int verbose){
+bool BrfShaderOpt::Load(FILE*f, int /*verbose*/){
   //map, colorOp, alphaOp, flags
   LoadInt(f,map);
   LoadUint(f,colorOp);
@@ -41,7 +41,7 @@ void BrfShaderOpt::Save(FILE*f) const{
 
 void BrfShader::SetDefault(){
   requires = 0;
-  sprintf(technique,name);
+  sprintf(technique,"%s",name);
   fallback[0]=0;
   flags = 0;
   BrfShaderOpt o;

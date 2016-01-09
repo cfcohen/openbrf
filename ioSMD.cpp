@@ -1,6 +1,7 @@
 /* OpenBRF -- by marco tarini. Provided under GNU General Public License */
 
 #include "brfData.h"
+#include "platform.h"
 
 #include "ioSMD.h"
 //#include "qdebug.h"
@@ -73,7 +74,7 @@ int versionErr;
 
 static bool expect(FILE* f, const char* what){
   static char str[255];
-  fscanf(f, "%s", str);
+  if (fscanf(f, "%s", str) != 1) throw std::runtime_error("Fscanf in expect() failed!");
   if (strcmp(str,what)){
     expectedErr = what;
     foundErr = str;
@@ -85,7 +86,7 @@ static bool expect(FILE* f, const char* what){
 
 static bool expectLine(FILE* f, const char* what){
   static char str[255];
-  fscanf(f, "%s\n", str);
+  if (fscanf(f, "%s\n", str) != 1) throw std::runtime_error("Fscanf in expectLine() failed!");
   if (strcmp(str,what)){
     expectedErr = what;
     foundErr = str;
@@ -98,7 +99,7 @@ static bool expectLine(FILE* f, const char* what){
 static bool fscanln(FILE*f, char *ln){
   int i=0;
   while (1) {
-    fread(&ln[i],1,1,f);
+    if (fread(&ln[i],1,1,f) != 1) throw std::runtime_error("Fscanf in fscanln() failed!");
     if (ln[i]=='\n') { ln[i]=0; return true;}
     i++;
   }
@@ -227,7 +228,7 @@ static void ioSMD_ExportTriangles(FILE*f,const BrfMesh &m , int fi){
 static bool ioSMD_ImportBoneStruct(FILE*f,BrfSkeleton &s ){
   int v=-1;
   if (!expect(f,"version")) return false;
-  fscanf(f, "%d\n",&v);
+  if (fscanf(f, "%d\n",&v) != 1) throw std::runtime_error("Fscanf in ioSMD_ImportBoneStruct() failed!");
   if (!expectLine(f,"nodes")) return false;
   if (v!=1) { versionErr = v; lastErr=3; return false;}
   bool rootFound = false;
@@ -296,7 +297,7 @@ template <class T>
 static bool ioSMD_ImportPose(FILE* f, BrfSkeleton &s,  T& pose, int &time){
   if (!expect(f,"time")) return false;
 
-  fscanf(f,"%d",&time);
+  if (fscanf(f,"%d",&time) != 1) throw std::runtime_error("Fscanf 1 in ioSMD_ImportPose() failed!");
   //for (static int i=0;i<s.bone.size(); i++)
   //  s.bone[i].
   while (1) {
@@ -306,7 +307,8 @@ static bool ioSMD_ImportPose(FILE* f, BrfSkeleton &s,  T& pose, int &time){
     //assert(i<(int)s.bone.size());
     float r[3];
     vcg::Point3f t;
-    fscanf(f,"%f %f %f %f %f %f", &(t[0]),&(t[2]),&(t[1]), r+0, r+1, r+2);
+    if (fscanf(f,"%f %f %f %f %f %f", &(t[0]),&(t[2]),&(t[1]), r+0, r+1, r+2) != 6)
+      throw std::runtime_error("Fscanf 2 in ioSMD_ImportPose() failed!");
     if (i>=(int)s.bone.size()) continue; // ignore rotation for non-existing bones
     s.bone[i].t = t/SCALE;
     pose.setRotationMatrix( euler2matrix(r) , i );
@@ -315,7 +317,7 @@ static bool ioSMD_ImportPose(FILE* f, BrfSkeleton &s,  T& pose, int &time){
 }
 
 int ioSMD::Export(const wchar_t*filename, const BrfMesh &m , const BrfSkeleton &s, int fi){
-  FILE* f=_wfopen(filename,L"wb");
+  FILE* f=wfopen(filename,"wb");
   lastErr = 0;
   if (!f) return(lastErr=2);
 
@@ -333,7 +335,7 @@ int ioSMD::Export(const wchar_t*filename, const BrfMesh &m , const BrfSkeleton &
 
 int ioSMD::Export(const wchar_t*filename, const BrfAnimation &a, const BrfSkeleton &s){
 
-  FILE* f=_wfopen(filename,L"wb");
+  FILE* f=wfopen(filename,"wb");
   lastErr = 0;
   if (!f) return(lastErr=2);
 
@@ -359,7 +361,7 @@ int ioSMD::Export(const wchar_t*filename, const BrfAnimation &a, const BrfSkelet
 int ioSMD::Import(const wchar_t*filename, BrfMesh &m , BrfSkeleton &s){
   lastErr = 0;
   nMaxBones = 0;
-  FILE* f=_wfopen(filename,L"rt");
+  FILE* f=wfopen(filename,"rt");
   if (!f) return(lastErr=1);
 
   if (!ioSMD_ImportBoneStruct(f,s)) return lastErr;
@@ -384,7 +386,7 @@ int ioSMD::Import(const wchar_t*filename, BrfMesh &m , BrfSkeleton &s){
 int ioSMD::Import(const wchar_t*filename, BrfAnimation &a, BrfSkeleton &s){
 
   lastErr = 0;
-  FILE* f=_wfopen(filename,L"rt");
+  FILE* f=wfopen(filename,"rt");
   if (!f) return(lastErr=1);
 
   if (!ioSMD_ImportBoneStruct(f,s)) return lastErr;

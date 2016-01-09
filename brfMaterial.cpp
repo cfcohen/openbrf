@@ -21,7 +21,7 @@ void BrfMaterial::SetDefault(){
   flags = 0;
   //renderOrder = 0;
   sprintf(shader,"simple_shader");
-  sprintf(diffuseA,name);
+  sprintf(diffuseA,"%s",name);
   sprintf(diffuseB,"none");
   sprintf(bump,"none");
   sprintf(enviro,"none");
@@ -88,7 +88,7 @@ void BrfMaterial::SetRenderOrder(int ro){
   flags+= ro<<24;
 }
 
-bool BrfMaterial::Load(FILE*f, int verbose){
+bool BrfMaterial::Load(FILE*f, int /*verbose*/){
   if (!LoadString(f, name)) return false;
   //if (verbose>0) printf("loading \"%s\"...\n",name);
   LoadUint(f , flags);

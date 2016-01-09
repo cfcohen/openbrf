@@ -74,7 +74,7 @@ public:
 
   void AddBoneHack(int copyfrom);
 
-	void ResampleOneEvery(int nFrames);
+	void ResampleOneEvery(unsigned int nFrames);
 
   void Shuffle( std::vector<int> &map, std::vector<vcg::Point4<float> > &fallback);
 

@@ -1239,7 +1239,7 @@ void GuiPanel::setNavigationStackDepth(int i){
   ui->labBackS->setVisible(i>1);
 }
 
-void GuiPanel::on_listView_customContextMenuRequested(QPoint pos)
+void GuiPanel::on_listView_customContextMenuRequested(QPoint /*pos*/)
 {
   return;
   QMenu menu(this);

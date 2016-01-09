@@ -55,7 +55,7 @@ bool BrfMesh::SaveOBJ(char* fn, int nframe) const{
   return true;
 }
 
-void IoOBJ::writeHitbox(QFile &f, const BrfBody& b, const BrfSkeleton& s){
+void IoOBJ::writeHitbox(QFile &/*f*/, const BrfBody& b, const BrfSkeleton& s){
   assert(b.part.size()==s.bone.size());
   std::vector<vcg::Matrix44f> v = s.GetBoneMatrices();
   //s.getRotationMatrix(0)

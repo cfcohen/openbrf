@@ -9,7 +9,7 @@ using namespace vcg;
 #include "brfBody.h"
 
 #include "saveLoad.h"
-
+#include "platform.h"
 
 // for hitboxes:
 // HACK: store/read original skel name into 2nd, 3rd, 4th bytes of flags of all parts
@@ -246,7 +246,7 @@ bool BrfBody::ImportOBJ(const wchar_t *fn){
   int startV = 0; // starting v
 
   // to do: read all v and f fields, looking for "o" (objects)
-  FILE* f = _wfopen(fn,L"rt");
+  FILE* f = wfopen(fn,"rt");
   if (!f) return false;
 
   std::string s;
@@ -455,13 +455,13 @@ void BrfBodyPart::SymmetrizeCapsule(){
 }
 
 
-bool BrfBodyPart::Load(FILE*f, char* _firstWord, int verbose ){
+bool BrfBodyPart::Load(FILE*f, char* _firstWord, int /*verbose*/ ){
   char firstWord[255];
 
   if (!_firstWord) {
     if (!LoadString(f,firstWord)) return false;
   }
-  else sprintf(firstWord,_firstWord);
+  else sprintf(firstWord,"%s",_firstWord);
 
   if (!strcmp(firstWord,"manifold")) {
     type=MANIFOLD;
@@ -530,7 +530,7 @@ bool BrfBodyPart::Skip(FILE*f, char* _firstWord){
   char firstWord[255];
 
   if (!_firstWord) { if (!LoadString(f,firstWord)) return false; }
-  else sprintf(firstWord,_firstWord);
+  else sprintf(firstWord,"%s",_firstWord);
 
 
   if (!strcmp(firstWord,"manifold")) {
@@ -767,7 +767,7 @@ bool BrfBodyPart::ExportOBJ(FILE* f, int i, int &vc) const{
 }
 
 bool BrfBody::ExportOBJ(const wchar_t* fn) const {
-  FILE* f =_wfopen(fn,L"wb");
+  FILE* f =wfopen(fn,"wb");
   if (!f) return false;
   fprintf(f,
     "# export of a body (Mount and Blade collision object)\n"

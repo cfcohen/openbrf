@@ -22,6 +22,7 @@ using namespace vcg;
 #include "carryPosition.h"
 
 #include "saveLoad.h"
+#include "platform.h"
 typedef vcg::Point3f Pos;
 typedef unsigned int uint;
 
@@ -1506,7 +1507,7 @@ void BrfMesh::FindSymmetry(vector<int> &output){
       }
     }  
   }
-  printf("Found %d symmetry (and %d self) on %d",nfound,nself,frame[0].pos.size());
+  printf("Found %d symmetry (and %d self) on %ld",nfound,nself,frame[0].pos.size());
 }
 
 void BrfMesh::ApplySymmetry(const vector<int> &input){
@@ -1526,8 +1527,8 @@ void BrfMesh::CopyPos(int nf, const BrfMesh &brf, const BrfMesh &newbrf){
     for (unsigned int j=0; j<brf.vert.size(); j++) {
       vcg::Point3f posA =     frame[nf].pos[     vert[i].index ];
       vcg::Point3f posB = brf.frame[0 ].pos[ brf.vert[j].index ];
-      vcg::Point2f uvA =     vert[i].ta;
-      vcg::Point2f uvB = brf.vert[j].ta;
+      //vcg::Point2f uvA =     vert[i].ta;
+      //vcg::Point2f uvB = brf.vert[j].ta;
       
       if (1
       // && (posA-posB).SquaredNorm()<0.01
@@ -1561,8 +1562,8 @@ void BrfMesh::FixTextcoord(const BrfMesh &brf,BrfMesh &ref, int fi){
     for (unsigned int j=0; j<brf.vert.size(); j++) {
       vcg::Point3f posA =     frame[fi].pos[     vert[i].index ];
       vcg::Point3f posB = brf.frame[ 0].pos[ brf.vert[j].index ];
-      vcg::Point2f uvA =     vert[i].ta;
-      vcg::Point2f uvB = brf.vert[j].ta;
+      //vcg::Point2f uvA =     vert[i].ta;
+      //vcg::Point2f uvB = brf.vert[j].ta;
       
       
       if (1
@@ -1647,7 +1648,7 @@ void BrfMesh::SetName(const char* st){
 }
 
 void BrfMesh::DeleteSelected(){
-  printf("  thereis %3dface, %3dpoin, %3dvert\n",face.size(), frame[0].pos.size(), vert.size());
+  printf("  there are %3ld faces, %3ld points, %3ld vertices\n",face.size(), frame[0].pos.size(), vert.size());
 
 
   vector<int> remapv;
@@ -1709,8 +1710,8 @@ void BrfMesh::DeleteSelected(){
     }
     if (ok) face.push_back(f); else deletedF++;
   }
-  printf("  deleted %3dface, %3dpoin, %3dvert\n",deletedF, deletedP, deletedV);
-  printf("  dsurviv %3dface, %3dpoin, %3dvert\n",face.size(), frame[0].pos.size(), vert.size());
+  printf("  deleted %3d faces, %3d points, %3d vertices\n",deletedF, deletedP, deletedV);
+  printf("  dsurviv %3ld faces, %3ld points, %3ld vertices\n",face.size(), frame[0].pos.size(), vert.size());
 }
 
 void BrfMesh::SelectAbsent(const BrfMesh& brf, int fi){
@@ -1859,7 +1860,7 @@ bool BrfMesh::CheckAssert() const{
   bool ok = true;
   for (unsigned int i=0; i<frame.size(); i++) {
     if ( frame[i].norm.size() != vert.size() ) {
-      printf("Check failed for frame %d! (%d != %d)\n",
+      printf("Check failed for frame %d! (%ld != %ld)\n",
       i,frame[i].norm.size() , vert.size());
       ok=false;
     }
@@ -2286,20 +2287,20 @@ void BrfMesh::SetTimings(const std::vector<int> &v){
 
 bool BrfMesh::SaveAsPly(int frameIndex, const wchar_t* path) const{
   wchar_t filename[255];
-  if (frame.size()==0) swprintf(filename,L"%ls%s.ply",path, name);
-  else swprintf(filename,L"%ls\%s%02d.ply",path, name,frameIndex);
-  FILE* f = _wfopen(filename,L"wt");
+  if (frame.size()==0) swprintf(filename,255,L"%ls%s.ply",path, name);
+  else swprintf(filename,255,L"%ls\%s%02d.ply",path, name,frameIndex);
+  FILE* f = wfopen(filename,"wt");
   if (!f) { printf("Cannot save \"%ls\"!\n",filename); return false;}
   printf("Saving \"%ls\"...\n",filename);
   fprintf(f,
     "ply\n"
     "format ascii 1.0\n"
     "comment fromBRF (by Marco Tarini)\n"
-    "element vertex %d\n"
+    "element vertex %ld\n"
     "property float x\n"
     "property float y\n"
     "property float z\n"
-    "element face %d\n"
+    "element face %ld\n"
     "property list uchar int vertex_indices\n"
     "end_header\n", vert.size(), face.size()
   );
@@ -2620,7 +2621,7 @@ void BrfMesh::FindRefPoints(){
     if ( vert[i].col == 0xFF800080 ) refpoint.push_back(vert[i].index);
   }
 
-  printf("Found %d ref points\n",refpoint.size());
+  printf("Found %ld ref points\n",refpoint.size());
 }
 
 Point3f OnCylinder(Point3f p, float range){
@@ -2913,7 +2914,7 @@ bool BrfMesh::IsAnimable() const{
 
 void BrfMesh::CopyTimesFrom(const BrfMesh &b){
   if (frame.size()!=b.frame.size()) {
-    printf("WARNING: different number of frames %d!=%d\n",frame.size(),b.frame.size());
+    printf("WARNING: different number of frames %ld!=%ld\n",frame.size(),b.frame.size());
   }
   for (unsigned int j=0; j<frame.size(); j++) {
     frame[j].time=b.frame[j].time;
@@ -3133,7 +3134,7 @@ void BrfMesh::MergeMirror(const BrfMesh &bb)
   BrfMesh b = bb;
   AlignToTop(*this,b);
   
-  printf("MErging %d fotograms\n",frame.size() );
+  printf("MErging %ld fotograms\n",frame.size() );
   int npos = frame[0].pos.size();
   int nvert = vert.size();
   

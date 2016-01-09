@@ -28,7 +28,7 @@ AskBoneDialog::AskBoneDialog(QWidget *parent,const std::vector<BrfSkeleton> &s,
 
 }
 
-void AskBoneDialog::onSelectBone(int i){
+void AskBoneDialog::onSelectBone(int /*i*/){
 	if (ui->cbCarryPos->currentIndex()!=0)
 		ui->cbCarryPos->setCurrentIndex(0);
 }

@@ -186,7 +186,7 @@ public:
   // reads the n^th int token from last read line
   long long longT(int n) throw (int){
     long long num;
-		int k=sscanf(stringT(n),"%ld",&num);
+		int k=sscanf(stringT(n),"%lld",&num);
     if (k!=1) error(QTextBrowser::tr("expected number istead of '%1' (token %2)").arg(stringT(n)).arg(n));
     return num;
   }
@@ -1426,8 +1426,8 @@ template <class T>
 void _updateListNoExt(QStringList &l, const vector<T> &d){
   for (unsigned int i=0; i<d.size(); i++) {
     QString s(d[i].name);
-    int i = s.indexOf(".");
-    if (i>0) s.truncate( i );
+    int p = s.indexOf(".");
+    if (p>0) s.truncate( p );
     l.append(s);
   }
 }
