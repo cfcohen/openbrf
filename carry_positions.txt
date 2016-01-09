@@ -1,0 +1,27 @@
+# openBRF: Carry positions 
+# edit this file strictly following the examples!
+# current values provided by [cmpxchg8b]
+
+itcf_carry_sword_left_hip: attach on hb_abdomen, offset by (0.24, 0.1, 0.1), rotate y by 88.2 deg, rotate z by -2.2 rad, rotate x by 0.12 rad, rotate y by -0.2 rad
+itcf_carry_axe_left_hip: attach on hb_abdomen, offset by (0.21, 0.12, 0.14), rotate y by 82.8 deg, rotate z by 1.0 rad, rotate y by 3.3415928 rad, move on forward axis by -(weapon_length - 0.3)
+itcf_carry_mace_left_hip: attach on hb_abdomen, offset by (0.21, 0.12, 0.14), rotate y by 82.8 deg, rotate z by 1.0 rad, rotate y by 3.3415928 rad, move on forward axis by -(weapon_length - 0.1)
+itcf_carry_dagger_front_left: attach on hb_abdomen, offset by (0.04, 0.25, 0.15), rotate y by 9.0 deg, rotate z by -2.5 rad, rotate y by -0.05 rad
+itcf_carry_dagger_front_right: attach on hb_abdomen, offset by (-0.04, 0.25, 0.15), rotate y by -189.0 deg, rotate z by -2.5 rad, rotate y by 0.05 rad
+itcf_carry_axe_back: attach on hb_thorax, offset by (-0.19, 0.29, -0.17), rotate z by 32.4 deg, rotate y by 180.0 deg, move on forward axis by -(weapon_length - 0.3)
+itcf_carry_sword_back: attach on hb_thorax, offset by (-0.19, 0.29, -0.17), rotate z by -147.6 deg
+itcf_carry_spear: attach on hb_thorax, offset by (-0.19, 0.29, -0.17), rotate z by 32.4 deg, move on forward axis by -0.67
+itcf_carry_kite_shield: attach on hb_thorax, offset by (-0.19, 0.04, -0.18), rotate y by 189.0 deg, rotate z by 63.0 deg
+itcf_carry_board_shield: attach on hb_thorax, offset by (-0.06, 0.18, -0.2), rotate y by -189.0 deg, rotate z by 90.0 deg
+itcf_carry_round_shield: attach on hb_thorax, offset by (-0.22, -0.06, -0.2), rotate y by -179.82 deg, rotate z by 63.0 deg
+itcf_carry_crossbow_back: attach on hb_thorax, offset by (0.19, 0.34, -0.155), rotate z by -32.4 deg, rotate y by 81.0 deg, rotate z by 0.1 rad, move on forward axis by -(weapon_length + 0.5)
+itcf_carry_bow_back: attach on hb_thorax, offset by (-0.05, 0.0, -0.19), rotate z by -32.4 deg, rotate y by -90.0 deg
+itcf_carry_quiver_front_right: attach on hb_abdomen, offset by (-0.21, 0.15, 0.0), rotate y by 82.8 deg, rotate z by -2.5 rad, rotate y by -0.2 rad
+itcf_carry_quiver_back_right: attach on hb_abdomen, offset by (-0.05, 0.03, -0.19), rotate y by 9.0 deg, rotate z by 1.1 rad, rotate y by 180.0 deg
+itcf_carry_quiver_right_vertical: attach on hb_abdomen, offset by (-0.23, 0.05, 0.0), rotate y by 82.8 deg, rotate z by 0.5 rad, rotate y by -0.05 rad, rotate x by 0.2 rad
+itcf_carry_quiver_back: attach on hb_thorax, offset by (-0.05, 0.02, -0.17), rotate z by 21.6 deg
+itcf_carry_buckler_left: attach on hb_abdomen, offset by (0.18, -0.1, -0.1), rotate y by 126.0 deg
+itcf_carry_revolver_right: attach on hb_thigh.R, offset by (-0.1, 0.0, 0.05), rotate y by -90.0 deg, rotate z by 54.0 deg, rotate y by -0.1 rad
+itcf_carry_pistol_front_left: attach on hb_abdomen, offset by (-0.07, 0.25, 0.15), rotate y by 9.0 deg, rotate z by -1.5 rad, rotate y by -0.05 rad
+itcf_carry_bowcase_left: attach on hb_abdomen, offset by (0.25, 0.03, -0.1), rotate y by -252.0 deg, rotate x by -0.25 rad, rotate z by -48.6 deg
+itcf_carry_katana: attach on hb_abdomen, offset by (0.23, 0.15, 0.23), rotate y by -82.8 deg, rotate z by 1.5 rad, rotate y by -0.2 rad
+itcf_carry_wakizashi: attach on hb_abdomen, offset by (0.05, 0.19, 0.24), rotate y by -126.0 deg, rotate z by 1.8 rad, rotate y by -0.2 rad
