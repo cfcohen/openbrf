@@ -1,4 +1,4 @@
-OpenBRF _by Marco Martini_
+OpenBRF _by Marco Tarini_
 ------------------------
 
 A modding tool used to view, edit and convert the proprietary _Binary Resource files_ (BRFs) loaded by the popular «Mount&Blade» and «Mount&Blade: Warband» games.
