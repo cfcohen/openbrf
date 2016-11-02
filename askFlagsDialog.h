@@ -3,7 +3,7 @@
 #ifndef ASKFLAGSDIALOG_H
 #define ASKFLAGSDIALOG_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 
 class QCheckBox;
 class QStatusBar;

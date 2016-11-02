@@ -44,9 +44,11 @@ struct DDSFormat {
 
 
 
+/*
 typedef void (APIENTRY *pfn_glCompressedTexImage2DARB) (GLenum, GLint, GLenum, GLsizei,
                                                         GLsizei, GLint, GLsizei, const GLvoid *);
 static pfn_glCompressedTexImage2DARB qt_glCompressedTexImage2DARB = 0;
+*/
 
 typedef QHash<QString, DdsData> QGLDDSCache;
 Q_GLOBAL_STATIC(QGLDDSCache, qgl_dds_cache)
@@ -124,14 +126,15 @@ bool loadOnlyDDSHeader(const QString &fileName, DdsData &data){
   return loadDDSHeader(f,data,unused);
 }
 
-static bool myBindTexture(const QString &fileName, DdsData &data)
+bool GLWidget::myBindTexture(const QString &fileName, DdsData &data)
 {
+    /*
     if (!qt_glCompressedTexImage2DARB) {
-
       QGLContext cx(QGLFormat::defaultFormat());
+      cx.getProcAddress(QLatin1String("glCompressedTexImage2D"));
       qt_glCompressedTexImage2DARB = (pfn_glCompressedTexImage2DARB) cx.getProcAddress(QLatin1String("glCompressedTexImage2DARB"));
-
     }
+    */
 
     QGLDDSCache::const_iterator it = qgl_dds_cache()->constFind(fileName);
     if (it != qgl_dds_cache()->constEnd()) {
@@ -142,11 +145,8 @@ static bool myBindTexture(const QString &fileName, DdsData &data)
 
     QFile f(fileName);
 
-
-
     DDSFormat ddsHeader;
     if (!loadDDSHeader(f, data, ddsHeader )) return false;
-
 
     int blockSize = 16;
     GLenum format=4;
@@ -194,11 +194,11 @@ static bool myBindTexture(const QString &fileName, DdsData &data)
     int w = ddsHeader.dwWidth;
     int h = ddsHeader.dwHeight;
 
-    if (!qt_glCompressedTexImage2DARB) {
+    /*if (!qt_glCompressedTexImage2DARB) {
         qWarning("QGLContext::bindTexture(): The GL implementation does not support texture"
                  "compression extensions.");
         return false;
-    }
+    }*/
 
     // load mip-maps
     for(int i = 0; i < (int) ddsHeader.dwMipMapCount; ++i) {
@@ -209,8 +209,8 @@ static bool myBindTexture(const QString &fileName, DdsData &data)
         if (offset+size>=bufferSize) offset = bufferSize-size;
 
 
-        //glCompressedTexImage2DARB
-        qt_glCompressedTexImage2DARB
+        glCompressedTexImage2D
+        //qt_glCompressedTexImage2DARB
                                     (GL_TEXTURE_2D, i, format, w, h, 0,
                                      size, pixels + offset);
         offset += size;

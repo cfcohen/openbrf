@@ -133,9 +133,10 @@ win32 {
     DEFINES += NOMINMAX
     DEFINES += _CRT_SECURE_NO_DEPRECATE
 }
-DEFINES += GLEW_STATIC
+#INCLUDEPATH += "C:\projects\libraries\include"
+# DEFINES += GLEW_STATIC
 
-#SOURCES += "C:\projects\libraries\sources\glew-1.5.3\src\glew.c"
+# SOURCES += "C:\projects\libraries\sources\glew-1.5.3\src\glew.c"
 #LIBS += -L"C:\projects\libraries\lib" \
 LIBS += "-lGLEW"
 LIBS += "-lGLU"
@@ -147,6 +148,15 @@ OTHER_FILES += shaders/bump_fragment.cpp
 OTHER_FILES += shaders/bump_vertex.cpp
 OTHER_FILES += shaders/iron_fragment.cpp
 OTHER_FILES += femininizer.morpher
+
+LIBS += -lGL -lGLU
+#LIBS += -lopengl32 -lglu32
+
+DISTFILES += \
+    translations/openbrf_de.ts \
+    translations/openbrf_en.ts \
+    translations/openbrf_es.ts \
+    translations/openbrf_zh.ts
 
 
 

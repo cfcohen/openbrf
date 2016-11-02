@@ -66,6 +66,8 @@ public:
   void Transform(float * m);
   void MakeQuadDominant();
 
+  void Scale(float f);
+
 private:
   Point3f Baricenter() const;
 };
@@ -98,6 +100,8 @@ public:
   void MakeQuadDominant();
 
   void UpdateBBox();
+
+  void Scale(float f);
 
   // for hitbox support: set and restore the skeleton name
   char* GetOriginalSkeletonName() const;

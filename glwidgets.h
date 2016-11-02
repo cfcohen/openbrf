@@ -4,6 +4,8 @@
 #define GLWIDGETS_H
 
 #include <QGLWidget>
+#include <QOpenGLFunctions_2_0>
+
 #include <QtGui>
 #include "brfData.h"
 #include "iniData.h"
@@ -28,7 +30,12 @@ public:
 
 //typedef std::map< std::string, std::string > MapSS;
 
-class GLWidget : public QGLWidget
+struct ViewportData{
+    std::vector<int> items;
+    int bestLod = 100;
+};
+
+class GLWidget : public QGLWidget, protected QOpenGLFunctions_2_0
 {
 	Q_OBJECT
 	QSize minimumSizeHint() const;
@@ -45,8 +52,8 @@ public:
 
 	int selected;
 	int subsel; // subpiece selected
-	int selRefAnimation; // animation selected to view rigged mesh
-	int selRefSkin; // rigged mesh
+	int selRefAnimation; // animation selected to view skinned mesh
+	int selRefSkin; // skinned mesh
 	int selRefSkel; // current skeleton
 	int selFrameN; // current selected frame of vertex ani
 
@@ -90,7 +97,8 @@ public slots:
 	void setLighting(int i);
 	void setTexture(int i);
 	void setNormalmap(int i);
-	void setSpecularmap(int i);
+    void setTransparency(int i);
+    void setSpecularmap(int i);
 	void setComparisonMesh(int i);
 	void setFloor(int i);
 	void setFloorForAni(int i);
@@ -130,8 +138,10 @@ public slots:
 	void setUseOpenGL2(bool mode);
 public:
 
-	bool useWireframe, useLighting, useTexture , useNormalmap, useFloor, useFloorInAni;
+    /* settings */
+    bool useWireframe, useLighting, useTexture , useTransparency, useNormalmap, useFloor, useFloorInAni, usePreviewTangents;
 	bool useRuler, useFloatingProbe, useSpecularmap, useHitboxes, useComparisonMesh;
+    bool autoComputeTangents;
 	bool ghostMode;
 	bool fixTexturesOnSight;
 	int colorMode, rulerLenght;
@@ -152,6 +162,7 @@ signals:
 	void setTextureData(DdsData d);
 	void displayInfo(QString st, int howlong);
 	void notifySelectedPoint(float x, float y, float z);
+    void signalSelection(std::vector<int> sel);
 
 protected:
 	//MapSS *mapMT;
@@ -177,10 +188,12 @@ protected:
 	void enableMaterial(const BrfMaterial& m);
 	void enableDefMaterial();
 
+    bool myBindTexture(const QString &fileName, DdsData &data);
+
 	// basic rendering of Brf Items & c:
 	void renderMesh(const BrfMesh& p, float frame);
 	void renderMeshSimple(const BrfMesh& p);
-	void renderRiggedMesh(const BrfMesh& p,  const BrfSkeleton& s, const BrfAnimation& a, float frame);
+	void renderSkinnedMesh(const BrfMesh& p,  const BrfSkeleton& s, const BrfAnimation& a, float frame);
 	void renderSkeleton(const BrfSkeleton& p);
 	void renderAnimation(const BrfAnimation& p, const BrfSkeleton& s, float frame);
 	void renderBody(const BrfBody& p);
@@ -188,29 +201,32 @@ protected:
 	void renderBody(const BrfBody& p, const BrfSkeleton& s, const BrfAnimation& a, float frame, bool ghost);
 
 
-	void renderBone(const BrfAnimation& p, const BrfSkeleton& s,  float frame, int i, int lvl)const; // recursive
-	void renderBone(const BrfSkeleton& p, int i, int lvl) const; // recursive
-	void renderBodyPart(const BrfBodyPart &b) const;
-	void renderBodyPart(const BrfBody &b, const BrfSkeleton& s, int i, int lvl) const; // recursive! (hitboxes)
-	void renderBodyPart(const BrfBody &b, const BrfSkeleton& s, const BrfAnimation& a, float frame, int i, int lvl) const; // recursive! (hitboxes)
+    void renderBone(const BrfAnimation& p, const BrfSkeleton& s,  float frame, int i, int lvl); // recursive
+    void renderBone(const BrfSkeleton& p, int i, int lvl); // recursive
+    void renderBodyPart(const BrfBodyPart &b);
+    void renderBodyPart(const BrfBody &b, const BrfSkeleton& s, int i, int lvl); // recursive! (hitboxes)
+    void renderBodyPart(const BrfBody &b, const BrfSkeleton& s, const BrfAnimation& a, float frame, int i, int lvl); // recursive! (hitboxes)
 
 
 
 	void renderTexture(const char* name, bool addExtension = true);
-	void renderSphereWire() const;
-	void renderCylWire(float rad, float h) const;
-	void renderOcta(int brightness) const;
+    void renderSphereWire();
+    void renderCylWire(float rad, float h);
+    void renderOcta(int brightness) ;
 	void renderFloor();
 	void renderFloorMaybe();
 	void renderRuler();
 
 	void mySetViewport(int viewportIndex);
+    int getViewportOf( int x, int y ) const;
 	void mySetViewport(int x,int y,int w,int h);
 	int nViewportCols, nViewportRows;
-	int nViewports;
+    bool bboxReady;
+    //int nViewports;
+    //int maxSel; // index of the max selected
 
-	void distributeSelectedInViewports(int nobj);
-	void maybeHideLods();
+    void distributeSelectedInViewports();
+    void maybeApplyRenderOrder();
 
 	void scaleAsLastBindedTexture();
 	void renderAoOnMeshesAllInViewportI(float brightness, float fromAbove, bool perface, bool inAlpha, bool overwrite, int I);
@@ -219,7 +235,7 @@ protected:
 	void glClearCheckBoard();
 	// rendering mode (just changes of openGL status):
 	void setShadowMode(bool on);
-	void setWireframeLightingMode(bool on, bool light, bool text) const;
+    void setWireframeLightingMode(bool on, bool light, bool text);
 	void setTextureName(QString st, int origin, int texUnit);
 	static bool fixTextureFormat(QString st);
 	void setMaterialName(QString st);
@@ -228,6 +244,7 @@ protected:
 	void setDummyRgbTexture();
 	void setDummySpecTexture();
 	void setDummyNormTexture();
+
 	void initOpenGL2();
 	bool openGL2ready;
 	void initDefaultTextures();
@@ -235,10 +252,7 @@ protected:
 
 	bool skeletalAnimation();
 
-	bool viewIs2D() const;
-
-
-
+    bool viewIs2D() const;
 
 public:
 
@@ -247,12 +261,15 @@ public:
 	void forgetChachedTextures();
 	QString getCurrentShaderDescriptor() const;
 	QString getCurrentShaderLog() const;
-	enum{MAXSEL=2000};
-	bool selGroup[MAXSEL];
-	int selViewport[MAXSEL]; // for each selected item, in which viewport it is
+
+    //enum{MAXSEL=10000};
+    //bool selGroup[MAXSEL];
+    //int selViewport[MAXSEL]; // for each selected item, in which viewport it is
+    std::vector< ViewportData >  inViewport;
+
+    Box3f globalBox, selectedBox;
 
 	int readCustomShaders();
-
 
 	int lastSkelAniFrameUsed;
 
@@ -263,7 +280,7 @@ private:
 	vcg::Point3f floatingProbe; // tmp
 	void renderFloatingProbe();
 
-	int w, h; // screen size
+    //int w, h; // screen size
 	QColor currBgColor, defaultBgColor; // bgcolors
 	QPoint lastPos; // mouse pos
 	bool mouseMoved;
@@ -310,7 +327,8 @@ private:
 	QMap<QString, QGLShaderProgram*> customShaders;
 	QGLShaderProgram* currentCustomShader;
 
-
+    int widthPix() const;
+    int heightPix() const;
 };
 
 #endif // GLWIDGETS_H

@@ -4,8 +4,12 @@
 #include "mainwindow.h"
 
 #include <QtGui>
+#include <QMessageBox>
+#include <QApplication>
+#include <QSpacerItem>
+#include <QGridLayout>
 
-const char* applVersion = "0.0.80";
+const char* applVersion = "0.0.82e";
 QString IniData::tokenFullName(int k){
 
   switch (k){
@@ -58,36 +62,51 @@ void MainWindow::about()
                "<p><i>Testing, bug reporting, suggestions by:</i> %3</p>"
                "<p><i>Additional art by:</i> %4</p>"
                "<p><i>Translations by:</i> %5</p>")
+
              ).arg(__DATE__)
               .arg("[mtarini] --- Marco Tarini")
-              .arg(" <br>[Abhuva], [amade], [Andrde Cuyne], [Barabas], "
-                   "[Barf], [Bilwit], [Bolkonsky], [Brutus], [Caba`drin], "
-                   "[captain lust], [cdvader], [Chel], [captain lust], [Computica], [cmpxchg8b], [Crazy-Q], [DaBlade], [Dain Ironfoot], "
+              .arg(QString::fromLatin1(
+                   " <br>[Abhuva], [amade], [Andrde Cuyne], [Barabas], "
+                   "[Barf], [Bilwit], [Block], [Bluehawk], [Bolkonsky], [Brutus], [Caba`drin], "
+                   "[captain lust], [cdvader], [Chel], [captain lust], [Computica], [cmpxchg8b], [Crazy-Q], [DaBlade], "
+                   "[Dain Ironfoot], "
                    "[Darwin], [dia151], [dreamterror], [dunde], [ealabor], [eierkopf], "
                    "[EvolutiveBrain], "
                    "[Fafhrd], [fedeita], [Fei Dao], [foxyman], [Freddex], [FrisianDude], "
 				   "[Geroj], [GetAssista], [giles], [Gothic Knight], [Harry_], [Hatonastick], "
-                   "[havarez], [Highelf], [Highlander], [HokieBT], [Ikaguia], [iggorbb], [iLag], [Jai], [killkhergit], "
-                   "[Konar], [Llew], [Lord_Cheap], [Lord Kinlar], [lord_olafson], "
+                   "[havarez], [Hemiola], [Highelf], [Highlander], [HokieBT], [Ikaguia], "
+                   "[iggorbb], [iLag], [Jai], [Khamukkamu], [killkhergit], "
+                   "[Konar], [k0nr@d], [Llew], [Lord_Cheap], [Lord Kinlar], [lord_olafson], "
                    "[LordRaglan], [Lumos], [MadocComadrin], [MadVader], [Mandible], [Mekelan], "
                    "[Merlkir], [mr.master], "
                    "[mysstick], [N0body], [newaxekub], "
-                   "[octoburn], [OrangeKnight], [pagan], [Percus], [qlithe], [Rath0s], [RATMdude92], [Red River], "
-                   "[rgcotl], [Roemerboy], [Romainoir], [Septa Scarabae], [Sayd Ûthman], [Silesian], [Shik], "
-                   "[Silver Wolf], [Shredzorz], [Slawomir of Aaarrghh], [Somebody], [SonKidd], [Spak], [Specialist], [Stefano], [Sunnetci_Dede], [Swyter], "
-				   "[thick1988], [Triglav], [Tul], [Ursca], [Vincenzo], [Vlejundo], [Vornne], [WilliamBerne], "
-                   "[yellowmosquito], [Yoshiboy], [xenoargh], [Zimke Zlovoljni]")
-              .arg("<br>[amade], [Swyter]!")
-              .arg(QString("<br> [foxyman] <i>(%1)</i><br>"
-                           " [Swyter] <i>(Español)</i><br>"
-                           " [Vlejundo] and [Roemerboy] <i>(Deutsche)</i><").arg(tr("additional code and Chinese")))
+                   "[octoburn], [OrangeKnight], [pagan], [Percus], [phlpp], [qlithe], [Rath0s], [RATMdude92], [Red River], "
+                   "[rgcotl], [Roemerboy], [Romainoir], [Ruthven], [SenpaiHinds], "
+                   "[Septa Scarabae], [Sayd Ûthman], [Silesian], [Shik], "
+                   "[Silver Wolf], [Shredzorz], [Slawomir of Aaarrghh], [Slytacular], [Somebody], [SonKidd], [Spak], "
+                   "[Specialist], [Stefano], [stephan_dinavoa], [Sunnetci_Dede], [Swyter], "
+                   "[themanwhocrys2],  [thick1988], [Triglav], [Tul], [Ursca], "
+                   "[Vincenzo], [Vlejundo], [Vornne], [WilliamBerne], "
+                   "[yellowmosquito], [Yoshiboy], [xenoargh], [Zimke Zlovoljni]" ))
+              .arg("<br>[amade], [Swyter]")
+              .arg(QString::fromLatin1(
+                   "<br> [foxyman] <i>(%1)</i><br>"
+                   " [Swyter] <i>(Español)</i><br>"
+                   " [Vlejundo] and [Roemerboy] <i>(Deutsche)</i>")
+              .arg(tr("additional code and Chinese")))
               .arg(applVersion)
+                 +QString("<p><i>%1</i><br>%2</p>").arg(tr("With detailed info about flag meanings provided by:")).arg("[cmpxchg8b]")
             ,QMessageBox::Ok, this);
-    msg.setLocale(QLocale::system());
-  //msg.layout()->addWidget(&lab);
+ msg.setLocale(QLocale::system());
+ //msg.layout()->addWidget(&lab);
 
-  msg.setIconPixmap( windowIcon().pixmap(128,128) );
-  msg.exec();
+ msg.setIconPixmap( windowIcon().pixmap(128,128) );
+
+ QSpacerItem* horizontalSpacer = new QSpacerItem(550, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+ QGridLayout* layout = (QGridLayout*)msg.layout();
+ layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+
+ msg.exec();
 }
 
 
@@ -105,8 +124,8 @@ void MainWindow::optionAutoFixTextureShowInfo(){
 
 }
 
-bool MainWindow::askIfUseOpenGL2(bool /*e*/){
-	QMessageBox::information(this,"OpenBrf",tr("Activating preview Shaders\n(can be disabled under Settings)"));
+bool MainWindow::askIfUseOpenGL2(bool e){
+    if (e) QMessageBox::information(this,"OpenBrf",tr("Activating preview Shaders\n(can be disabled under Settings)"));
 	return true;
 	/*
  return (QMessageBox::question(this,"OpenBrf",tr(

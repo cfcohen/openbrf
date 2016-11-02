@@ -1,6 +1,6 @@
 #include "askColorDialog.h"
 
-#include <QtGui/qdialog.h>
+#include <QDialog>
 #include <QShortcut>
 #include <QApplication>
 #include <QClipboard>

@@ -38,6 +38,7 @@ vcg::Point3f BrfSkeleton::adjustCoordSyst(vcg::Point3f p){
   return matr*p;
 }
 
+
 // for rotations (full):
 vcg::Point4f   BrfSkeleton::adjustCoordSyst(vcg::Point4f p){
   //generic:
@@ -77,9 +78,9 @@ vcg::Matrix44f BrfSkeleton::adjustCoordSystHalf(vcg::Matrix44f m){
   return matr*m;
 }
 
-float BrfSkeleton::BoneSizeX(){return 0.12;}
-float BrfSkeleton::BoneSizeY(){return 0.06;}
-float BrfSkeleton::BoneSizeZ(){return 0.04;}
+float BrfSkeleton::BoneSizeX(){return 0.12f;}
+float BrfSkeleton::BoneSizeY(){return 0.06f;}
+float BrfSkeleton::BoneSizeZ(){return 0.04f;}
 
 std::vector<int> BrfSkeleton::Bone2BoneMap(const BrfSkeleton & s) const{
   std::vector<int> res(bone.size(),-1);
@@ -99,6 +100,12 @@ std::vector<vcg::Point4<float> > BrfSkeleton::BoneRotations() const{
   return res;
 }
 
+
+void  BrfSkeleton::Scale(float f){
+    for (unsigned int i=0; i<bone.size(); i++) {
+        bone[i].t*=f;
+    }
+}
 
 int BrfSkeleton::FindSpecularBoneOf(int i) const{
 	char boneName[255];
@@ -121,7 +128,7 @@ void BrfSkeleton::BuildDefaultMesh(BrfMesh & m) const{ // builds a mesh with jus
   m.frame[0].pos.resize(nb*6);
   m.frame[0].norm.resize(nb*6);
   m.face.resize(nb*8);
-  m.rigging.resize(nb*6);
+  m.skinning.resize(nb*6);
 
   float
     X=BrfSkeleton::BoneSizeX(),
@@ -143,13 +150,13 @@ void BrfSkeleton::BuildDefaultMesh(BrfMesh & m) const{ // builds a mesh with jus
   std::vector<vcg::Matrix44f> mat = GetBoneMatrices();
 
   for (int i=0, pi=0, fi=0; i<nb; i++) {
-    // set up rigging...
+    // set up skinning...
     for (int j=0; j<6; j++,pi++){
-      m.rigging[pi].boneIndex[0]=i;
-      m.rigging[pi].boneWeight[0]=1;
+      m.skinning[pi].boneIndex[0]=i;
+      m.skinning[pi].boneWeight[0]=1;
       for (int h=1; h<4; h++) {
-        m.rigging[pi].boneIndex[h]=-1;
-        m.rigging[pi].boneWeight[h]=0;
+        m.skinning[pi].boneIndex[h]=-1;
+        m.skinning[pi].boneWeight[h]=0;
       }
 
       // set up pos and norm

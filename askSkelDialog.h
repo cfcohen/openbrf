@@ -3,7 +3,7 @@
 #ifndef ASKSKELDIALOG_H
 #define ASKSKELDIALOG_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 #include <vector>
 
 class BrfSkeleton;

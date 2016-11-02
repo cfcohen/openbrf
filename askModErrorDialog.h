@@ -3,7 +3,7 @@
 #ifndef ASKMODERRORDIALOG_H
 #define ASKMODERRORDIALOG_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 #include <QUrl>
 class IniData;
 class ErrListModel;

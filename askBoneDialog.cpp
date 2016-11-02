@@ -68,7 +68,7 @@ void AskBoneDialog::onSelectCarryPos(int i){
 
 }
 
-void AskBoneDialog::sayNotRigged(bool say){
+void AskBoneDialog::sayNotSkinned(bool say){
   ui->label_3->setVisible(say);
 }
 

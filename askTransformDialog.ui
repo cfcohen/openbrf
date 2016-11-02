@@ -314,7 +314,7 @@
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>icons/ico_right.png</normaloff>icons/ico_right.png</iconset>
+       <normaloff>:icons/ico_right.png</normaloff>:icons/ico_right.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -469,7 +469,7 @@
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>icons/ico_right.png</normaloff>icons/ico_right.png</iconset>
+       <normaloff>:icons/ico_right.png</normaloff>:icons/ico_right.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -566,7 +566,7 @@
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>icons/ico_right.png</normaloff>icons/ico_right.png</iconset>
+       <normaloff>:icons/ico_right.png</normaloff>:icons/ico_right.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -751,7 +751,7 @@ object only</string>
   <customwidget>
    <class>MyDoubleSpinBox</class>
    <extends>QDoubleSpinBox</extends>
-   <header>../tablemodel.h</header>
+   <header>tablemodel.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

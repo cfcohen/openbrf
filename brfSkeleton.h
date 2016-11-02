@@ -100,6 +100,7 @@ public:
   // layout hitboxes according to bones position (or does the inverse)
   bool LayoutHitboxes(const BrfBody &in, BrfBody &out, bool inverse) const;
 
+  void Scale( float f );
 private:
 
   void Export(const wchar_t *f); // for intrnal use

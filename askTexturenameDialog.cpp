@@ -3,6 +3,7 @@
 #include "askTexturenameDialog.h"
 #include "ui_askTexturenameDialog.h"
 #include <QtGui>
+#include <QFileDialog>
 
 bool AskTexturenameDialog::lastAlsoAdd=false;
 

@@ -96,7 +96,7 @@
     </font>
    </property>
    <property name="text">
-    <string>This mesh is not rigged:</string>
+    <string>This mesh is not skinned:</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_4">

@@ -37,7 +37,12 @@ void BrfBody::SetOriginalSkeletonName(const char* n){
   }
 }
 
-
+void BrfBodyPart::Scale(float f){
+    center*=f;
+    dir*=f;
+    radius*=f;
+    for (unsigned int i=0; i<pos.size(); i++) pos[i]*=f;
+}
 
 BrfBody::BrfBody()
 {
@@ -85,13 +90,20 @@ void BrfBody::Flip(){
   UpdateBBox();
 }
 
+void BrfBody::Scale(float f){
+  for (unsigned int i=0; i<part.size(); i++) part[i].Scale(f);
+  bbox.min*=f;
+  bbox.max*=f;
+  if (f<0) std::swap(bbox.min,bbox.max);
+}
+
 void BrfBody::Transform(float *f){
   for (unsigned int i=0; i<part.size(); i++) part[i].Transform(f);
   UpdateBBox();
 }
 
 float* BrfBodyPart::GetRotMatrix() const{
-  vcg::Point3f dx, dy, dz(1,1.1,1.3);
+  vcg::Point3f dx, dy, dz(1,1.1f,1.3f);
   dx = (dir-center)/2.0;
   dy = dz ^ dx;
   dz = dx ^ dy;

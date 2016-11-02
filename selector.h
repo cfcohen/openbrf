@@ -28,27 +28,30 @@ public:
 	int numSelected() const;
 	int onlySelected(int kind) const; // return index of only selected object of given kind or -1
 	QModelIndexList selectedList() const;
+    std::vector<int> allSelected() const;
 	void moveSel(int d);
 	BrfData* reference;
 	const BrfData* data;
 	const IniData* iniData;
 	bool iniDataWaitsSaving;
 	int iniFileIndex;
-	void selectOne(int kind, int i);
-	void selectOneSilent(int kind, int i);
 	void updateContextMenu();
 	void keyPressEvent(QKeyEvent *);
 	QMenu *contextMenu;
 
 	static void addDataToAllActions(QMenu* m, QString s);
 
+    void selectOne(int kind, int i);
+    void selectOneSilent(int kind, int i);
+
 public slots:
 	void selectAll();
 	void invertSelection();
+    void selectMany( std::vector<int> i);
 
 private slots:
 	void onChanged();
-	void onClicked(const QModelIndex & i);
+    void onDoubleClicked(const QModelIndex & i);
 	void onBreakAni();
 	void onBreakAniWithIni();
 	void addToRefMeshA();
@@ -134,7 +137,7 @@ public:
 	// exporter acts
 	*exportImportMeshInfoAct,
 	*exportStaticMeshAct,
-	*exportRiggedMeshAct,
+	*exportSkinnedMeshAct,
 	*exportMovingMeshFrameAct,
 	*exportMovingMeshAct,
 	*exportMeshGroupAct,
@@ -172,6 +175,7 @@ public:
 	*bodyMakeQuadDominantAct,
 	*bodyMerge,
 
+    *scaleSkeletonAct,
 	*sortEntriesAct,
 	*noSelectionDummyAct,
 

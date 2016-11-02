@@ -66,10 +66,10 @@ bool IoOBJ::writeMesh(QFile &f, const BrfMesh& m, int fr){
 //bool BrfMesh::SaveOBJ(char* fn, int nframe) const{
   QString s;
   s = QString("s %1\n").arg(m.name);
-  f.write(s.toAscii());
+  f.write(s.toLatin1());
   //s = QString("newmtl %1\nusemtl %1\n").arg(m.material);
   s = QString("newmtl %1\nKa 0.8 0.8 0.8\nKd 0.2 0.2 0.2\nusemtl %1\n").arg(m.material);
-  f.write(s.toAscii());
+  f.write(s.toLatin1());
 
 
   int np = 0, nv =0;
@@ -78,7 +78,7 @@ bool IoOBJ::writeMesh(QFile &f, const BrfMesh& m, int fr){
       .arg(-m.frame[fr].pos[i].X())
       .arg(m.frame[fr].pos[i].Y())
       .arg(m.frame[fr].pos[i].Z());
-    f.write(s.toAscii());
+    f.write(s.toLatin1());
     np++;
   }
   for (unsigned int i=0; i<m.vert.size(); i++) {
@@ -86,11 +86,11 @@ bool IoOBJ::writeMesh(QFile &f, const BrfMesh& m, int fr){
       .arg(-m.frame[fr].norm[i].X())
       .arg(m.frame[fr].norm[i].Y())
       .arg(m.frame[fr].norm[i].Z());
-    f.write(s.toAscii().data());
+    f.write(s.toLatin1().data());
     s = QString("vt %1 %2\n")
       .arg(m.vert[i].ta.X())
       .arg(1.0f-m.vert[i].ta.Y());
-    f.write(s.toAscii());
+    f.write(s.toLatin1());
     nv++;
   }
 
@@ -101,7 +101,7 @@ bool IoOBJ::writeMesh(QFile &f, const BrfMesh& m, int fr){
       s = QString(" %1/%2/%2")
         .arg(m.vert[m.face[i].index[w]].index +1 + cp)
         .arg(m.face[i].index[w] +1 +cv);
-      f.write(s.toAscii());
+      f.write(s.toLatin1());
     }
     f.write("\n");
   }
@@ -139,7 +139,7 @@ void IoOBJ::subdivideLast(const BrfMesh& m, std::vector<BrfMesh> &res){
   for (int i=0; i<nmat; i++){
     res[i] = m;
     res[i].face.clear();
-    sprintf(res[i].material,"%s",matMeshVec[i].second.toAscii().data());
+    sprintf(res[i].material,"%s",matMeshVec[i].second.toLatin1().data());
     if (i>0)
       sprintf(res[i].name,"%s.%d",m.name,i);
     else
@@ -187,39 +187,39 @@ bool BrfMesh::LoadOBJ(char* fn){
     QString s = QString("%1").arg(st);
     s = s.trimmed();
     if (s.startsWith("usemtl ")) {
-      char cp[512]; sprintf(cp,"%s",s.toAscii().data());
+      char cp[512]; sprintf(cp,"%s",s.toLatin1().data());
       sscanf( cp, "usemtl %s", material);
       curMM.second=QString("%1").arg(material);
       newMM= true;
       setGotMaterialName(true);
     }
     else if (s.startsWith("v ")) {
-      char cp[512]; sprintf(cp,"%s",s.toAscii().data());
+      char cp[512]; sprintf(cp,"%s",s.toLatin1().data());
       Point3f p;
       sscanf( cp,"v %f %f %f",&(p[0]),&(p[1]),&(p[2])); p[0]=-p[0];
       frame[0].pos.push_back(p);
     }
     else if (s.startsWith("vn ")) {
-      char cp[512]; sprintf(cp,"%s",s.toAscii().data());
+      char cp[512]; sprintf(cp,"%s",s.toLatin1().data());
       Point3f p;
       sscanf( cp,"vn %f %f %f",&(p[0]),&(p[1]),&(p[2])); p[0]=-p[0];
       norm.push_back(p);
     }
     else if (s.startsWith("vt ")) {
-      char cp[512]; sprintf(cp,"%s",s.toAscii().data());
+      char cp[512]; sprintf(cp,"%s",s.toLatin1().data());
       Point2f p;
       sscanf( cp,"vt %f %f",&(p[0]),&(p[1])); p[1]=1-p[1];
       ta.push_back(p);
     }
     else if (s.startsWith("s ")) {
-      char cp[512]; sprintf(cp,"%s",s.toAscii().data());
+      char cp[512]; sprintf(cp,"%s",s.toLatin1().data());
       char meshName[4096];
       sscanf( cp, "s %s", meshName);
       curMM.first=QString("%1").arg(meshName);
       newMM= true;
     }
     else if (s.startsWith("f ")) {
-      char cp[512]; sprintf(cp,"%s",s.toAscii().data());
+      char cp[512]; sprintf(cp,"%s",s.toLatin1().data());
 
 
       if (newMM) {

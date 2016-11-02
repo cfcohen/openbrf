@@ -96,12 +96,12 @@ private:
 };
 
 template<class BrfType> static vector<BrfType     > & VectorOf(BrfData& d);
-template<> vector<BrfMesh     > & VectorOf<BrfMesh     >(BrfData& d){ return d.mesh;      }
-template<> vector<BrfTexture  > & VectorOf<BrfTexture  >(BrfData& d){ return d.texture;   }
-template<> vector<BrfShader   > & VectorOf<BrfShader   >(BrfData& d){ return d.shader;    }
-template<> vector<BrfMaterial > & VectorOf<BrfMaterial >(BrfData& d){ return d.material;  }
-template<> vector<BrfSkeleton > & VectorOf<BrfSkeleton >(BrfData& d){ return d.skeleton;  }
-template<> vector<BrfAnimation> & VectorOf<BrfAnimation>(BrfData& d){ return d.animation; }
-template<> vector<BrfBody     > & VectorOf<BrfBody     >(BrfData& d){ return d.body;      }
+template<> inline vector<BrfMesh     > & VectorOf<BrfMesh     >(BrfData& d){ return d.mesh;      }
+template<> inline vector<BrfTexture  > & VectorOf<BrfTexture  >(BrfData& d){ return d.texture;   }
+template<> inline vector<BrfShader   > & VectorOf<BrfShader   >(BrfData& d){ return d.shader;    }
+template<> inline vector<BrfMaterial > & VectorOf<BrfMaterial >(BrfData& d){ return d.material;  }
+template<> inline vector<BrfSkeleton > & VectorOf<BrfSkeleton >(BrfData& d){ return d.skeleton;  }
+template<> inline vector<BrfAnimation> & VectorOf<BrfAnimation>(BrfData& d){ return d.animation; }
+template<> inline vector<BrfBody     > & VectorOf<BrfBody     >(BrfData& d){ return d.body;      }
 
 #endif

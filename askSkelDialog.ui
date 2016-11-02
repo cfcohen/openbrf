@@ -99,7 +99,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Change geometry of meshes currently rigged for a skeleton</string>
+    <string>Change geometry of meshes currently skinned for a skeleton</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_4">

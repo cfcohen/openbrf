@@ -35,6 +35,7 @@ bool BrfMaterial::HasBump() const {
 bool BrfMaterial::HasSpec() const {
   return (strcmp(spec,"none")!=0);
 }
+
 const char* BrfMaterial::getTextureName(int i) const{
 	switch (i){
 	default:
@@ -74,12 +75,80 @@ bool BrfMaterial::Skip(FILE*f
 }
 
 
-int BrfMaterial::RenderOrder() const{
-  // -8..+7 encoded as 4 bits difference encoding...
-  int res = ( flags >>24 ) & 15;
-  if (res>7) res -= 16;
-  return res;
+bool BrfMaterial::FlagUniformLighting() const{
+    return (flags & (1<<6))!=0;
 }
+
+bool BrfMaterial::FlagNoZWrite() const{
+    return (flags & (1<<3))!=0;
+}
+
+bool BrfMaterial::FlagNoDepthTest() const{
+    return (flags & (1<<4))!=0;
+}
+
+bool BrfMaterial::FlagAutoNormalize() const{
+    return (flags & (1<<11))!=0;
+}
+
+bool BrfMaterial::FlagBlend() const{
+    return ( ((flags & (7<<8))!=0) && ((flags & (7<<8))!=(7<<8)) ) ; // 7 = "auto mode" -- unclear, consider it NOT blend
+}
+
+bool BrfMaterial::FlagAlphaTest() const{
+    return (flags & (3<<12))!=0;
+}
+
+int  BrfMaterial::FlagRenderOrder() const{
+    if (flags & (1<<16)) return -9; // render 1st
+    else {
+        // -8..+7 encoded as 4 bits difference encoding...
+        int res = ( flags >>24 ) & 15;
+        if (res>7) res -= 16;
+        return res;
+        return (int)((flags >>24)&15);
+    }
+}
+
+float BrfMaterial::FlagAlphaValue() const{
+    switch ((flags>>12)&3) {
+    default: return 0;
+    case  1: return 8/256.0f;
+    case  2: return 136/256.0f;
+    case  3: return 251/256.0f;
+    }
+}
+
+#define GL_ZERO                           0
+#define GL_ONE                            1
+#define GL_SRC_COLOR                      0x0300
+#define GL_SRC_ALPHA                      0x0302
+#define GL_ONE_MINUS_SRC_ALPHA            0x0303
+
+int  BrfMaterial::FlagBlendFuncSrc() const{
+    switch ((flags>>8)&7) {
+    default:
+    case 0: return GL_ONE;
+    case 7:
+    case 1: return GL_SRC_ALPHA;
+    case 2: return GL_SRC_ALPHA;
+    case 3: return GL_ZERO;
+    case 4: return GL_ONE;
+    }
+}
+
+int  BrfMaterial::FlagBlendFuncDst() const{
+    switch ((flags>>8)&7) {
+    default:
+    case 0: return GL_ZERO;
+    case 7:
+    case 1: return GL_ONE_MINUS_SRC_ALPHA;
+    case 2: return GL_ONE;
+    case 3: return GL_SRC_COLOR;
+    case 4: return GL_ONE;
+    }
+}
+
 
 void BrfMaterial::SetRenderOrder(int ro){
   assert(ro>=-8 && ro<=7);

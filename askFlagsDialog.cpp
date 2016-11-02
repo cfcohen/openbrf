@@ -4,6 +4,11 @@
 #include "ui_askFlagsDialog.h"
 
 #include<QtGui>
+#include<QStatusBar>
+#include<QCheckBox>
+#include<QComboBox>
+#include<QLabel>
+
 #include<assert.h>
 
 AskFlagsDialog::AskFlagsDialog(QWidget *parent, QString title, unsigned int ones, unsigned int zeros, QString *names) :
@@ -101,25 +106,46 @@ void AskFlagsDialog::setBitCombo(QString name, QString tip, int aa, int bb, int*
   _setBitCombo(name,tip,aa,bb,options,NULL,zeroIndex);
 }
 
+void resizeAsContents(QComboBox * c){
+    int max = 1;
+    for (int i=0; i<c->count(); i++)
+    max = std::max( max, c->itemText(i).count('\n')+1 );
+
+    c->setMinimumHeight(max*(3+c->fontMetrics().height()));
+    c->setMaximumWidth(120);
+    //c->setSizePolicy(QSizePolicy::Policy::Min,QSizePolicy::Policy::Minimum);
+    //c->setSizeAdjustPolicy( QComboBox::AdjustToContents );
+}
+
 void AskFlagsDialog::_setBitCombo(QString name, QString tip, int aa, int bb, int* optionsInt, const char** optionsChar, int zeroIndex){
   QWidget *g = new QWidget(this);// or QGroupBox(t,this);
-  g->setLayout(new QHBoxLayout(g));
+
+  QHBoxLayout *lay = new QHBoxLayout(g);
+
+  g->setLayout(lay);
 
   QWidget *w;
-  if (aa<8) w=m_ui->widget;
-  else if (aa<16) w=m_ui->widget_2;
-  else if (aa<24) w=m_ui->widget_3;
-  else w=m_ui->widget_4;
-  /*if (aa%8==0) {*/
-    w->layout()->addWidget(g);
-  //}
+  w = (aa<8 ) ? m_ui->widget   :
+      (aa<16) ? m_ui->widget_2 :
+      (aa<24) ? m_ui->widget_3 :
+                m_ui->widget_4 ;
+
+  w->layout()->addWidget(g);
 
   QComboBox *b = new QComboBox(this);
+
   g->layout()->setMargin(0);
+
   QLabel * label = new QLabel(name+":",this);
-  g->layout()->addWidget(label);
   label->setStatusTip(tip);
+
+  //lay->insertWidget(0,label,1);
+  //lay->insertWidget(1,b,1);
+  g->layout()->addWidget(label);
   g->layout()->addWidget(b);
+
+
+
   for (int j=0; j<(1<<(bb-aa)); j++) {
     if (optionsInt)
       b->addItem(QString("%1").arg(optionsInt[j]));
@@ -127,8 +153,11 @@ void AskFlagsDialog::_setBitCombo(QString name, QString tip, int aa, int bb, int
       b->addItem(QString("%1").arg(optionsChar[j]));
     else
       b->addItem(QString("%1").arg(j));
-    b->setStatusTip(tip);
   }
+  b->setStatusTip(tip);
+
+  resizeAsContents( b );
+
   for (int i=aa; i<bb; i++) {
     assert( status[i]==_BIT );
     cb[i]->setText(QString("%1 (bit %2)").arg(name).arg(i-aa+1));
@@ -145,7 +174,7 @@ void AskFlagsDialog::_setBitCombo(QString name, QString tip, int aa, int bb, int
   bcB.push_back(bb);
   bcZeroIndex.push_back(zeroIndex);
 
-  checkbox2combobox(bcGB.size()-1);
+  checkbox2combobox((int)bcGB.size()-1);
 }
 
 void AskFlagsDialog::comboboxes2checkboxes(){

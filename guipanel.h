@@ -3,7 +3,7 @@
 #ifndef GUIPANEL_H
 #define GUIPANEL_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QModelIndexList>
 #include <map>
 #include "ddsData.h"
@@ -42,7 +42,6 @@ public:
 
 	enum{DIFFUSEA, DIFFUSEB, BUMP, ENVIRO, SPECULAR, SHADERNAME } curMaterialFocus;
 	QLineEdit* materialLeFocus();
-
 
 	protected:
 	  //MapSS *mapMT;
@@ -97,7 +96,7 @@ public slots:
 	void updateSelectedBone();
 	void setSelection(const QModelIndexList &, int k);
 	void updateFrameNumber(int i);
-	void updateMaterial(QString st);
+    void updateSingleMaterial(QString st);
 	void updateRefAnimation();
 	void setRefAnimation(int i);
 

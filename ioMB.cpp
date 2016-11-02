@@ -40,7 +40,7 @@ static QString token(){
   if (!nextT.isEmpty()) {
     QString res = nextT;
     nextT.clear();
-    //fprintf(debug,"reuse:[%s]\n",res.toAscii().data());fflush(debug);
+    //fprintf(debug,"reuse:[%s]\n",res.toLatin1().data());fflush(debug);
     return res;
   }
 
@@ -59,7 +59,7 @@ static QString token(){
     lineEnd=true;
   }
 
-  //fprintf(debug,"[%s]\n",res.toAscii().data());fflush(debug);
+  //fprintf(debug,"[%s]\n",res.toLatin1().data());fflush(debug);
   return res;
 }
 
@@ -96,7 +96,7 @@ static QString readStrQuotes(){
 }
 
 static void readStrQuotesChar(char*c){
-  sprintf(c,"%s",readStrQuotes().toAscii().data());
+  sprintf(c,"%s",readStrQuotes().toLatin1().data());
 }
 
 
@@ -233,7 +233,7 @@ static vcg::Point3f readPointRot(){
   res.Y() = readFloat();
   res.Z() = readFloat();
 
-  return res*(M_PI/180.0);
+  return res*float(M_PI/180.0);
 }
 
 static char lastIntervalName[255];
@@ -242,7 +242,7 @@ static bool readInterval(QString s, const char* token, int*a, int *b){
   sprintf(lastIntervalName, "%s", token);
   if (s.startsWith(t)) {
     QString format = QString("\"%1[%2d:%2d]").arg(token).arg('%');
-    sscanf(s.toAscii().data(),format.toAscii().data(),a,b);
+    sscanf(s.toLatin1().data(),format.toLatin1().data(),a,b);
     return true;
   }
   return false;
@@ -256,8 +256,8 @@ static bool readInterval(QString s, const char* tokenA, int *n, const char* toke
     QString format2 = QString("\"%1[%2d].%3[%2d]").arg(tokenA).arg('%').arg(tokenB);
     //qDebug()<<format1<< " and " << format2 << " for [" << s << "]";
     int x,y;
-    if ((x=sscanf(s.toAscii().data(),format1.toAscii().data(),n,a,b))==3) return true;
-    if ((y=sscanf(s.toAscii().data(),format2.toAscii().data(),n,a))==2) { *b=*a; return true;}
+    if ((x=sscanf(s.toLatin1().data(),format1.toLatin1().data(),n,a,b))==3) return true;
+    if ((y=sscanf(s.toLatin1().data(),format2.toLatin1().data(),n,a))==2) { *b=*a; return true;}
     //qDebug()<<"FAILED"<<x<<y;
     return false;
   }
@@ -314,15 +314,15 @@ static void ioMB_exportRigging(const BrfMesh &m){
   fprintf(f,
     "createNode skinCluster -n \"%s_skin\";\n"
     "\tsetAttr -s %ld \".wl\";\n"
-    ,m.name, m.rigging.size()
+    ,m.name, m.skinning.size()
   );
-  for (unsigned int i=0; i<m.rigging.size(); i++) {
-    int minj = m.rigging[i].boneIndex[0];
+  for (unsigned int i=0; i<m.skinning.size(); i++) {
+    int minj = m.skinning[i].boneIndex[0];
     int maxj = minj;
     int nj=0;
     for (int j=0; j<4; j++) {
-      if (m.rigging[i].boneWeight[j]>0) {
-        int k = m.rigging[i].boneIndex[j];
+      if (m.skinning[i].boneWeight[j]>0) {
+        int k = m.skinning[i].boneIndex[j];
         if (maxj<k) maxj=k;
         if (minj>k) minj=k;
         nj++;
@@ -339,7 +339,7 @@ static void ioMB_exportRigging(const BrfMesh &m){
         "\tsetAttr -s %d \".wl[%d].w[%d:%d]\"",
         maxj-minj+1,i,minj,maxj
       );
-      for (int j=minj; j<=maxj; j++) fprintf(f," %f",m.rigging[i].WeightOf(j));
+      for (int j=minj; j<=maxj; j++) fprintf(f," %f",m.skinning[i].WeightOf(j));
       fprintf(f,";\n");
     } else {
       fprintf(f,
@@ -348,7 +348,7 @@ static void ioMB_exportRigging(const BrfMesh &m){
       );
       int test=0;
       for (int j=minj; j<=maxj; j++) {
-        float w = m.rigging[i].WeightOf(j);
+        float w = m.skinning[i].WeightOf(j);
         if (w!=0) {
           fprintf(f,"\tsetAttr \".wl[%d].w[%d]\" %f;\n",i,j,w);
           test++;
@@ -521,7 +521,7 @@ static int ioMB_importRiggingSize(){
 static int ioMB_importRigging(BrfMesh &m){
   int a,b,n;
   int max = m.frame[0].pos.size();
-  m.rigging.resize(max);
+  m.skinning.resize(max);
   //qDebug("Start...");
 
   //int last = 0;
@@ -530,7 +530,7 @@ static int ioMB_importRigging(BrfMesh &m){
     QString t =  token();
     //testNext();
     //testNext();
-    //qDebug("token:[[[%s]]]",t.toAscii().data());
+    //qDebug("token:[[[%s]]]",t.toLatin1().data());
 
     if (t=="-s") {
       readInt(); // skip size
@@ -548,8 +548,8 @@ static int ioMB_importRigging(BrfMesh &m){
        //testNext();
        float w = readFloat();
        //qDebug("adding (%d,%f) to pos %d",i,w,n);
-       m.rigging[n].Add(i,w);
-       //m.rigging[n].Add(0,1);
+       m.skinning[n].Add(i,w);
+       //m.skinning[n].Add(0,1);
 
 
 
@@ -578,7 +578,7 @@ static bool ioMB_importMesh(BrfMesh &m ){
   m.face.clear();
   m.material[0]=0;
   m.maxBone=0;
-  m.rigging.clear();
+  m.skinning.clear();
 
   int vcount =0;
   int fsize = 0;
@@ -719,7 +719,7 @@ static void ioMB_exportHeader(){
   fprintf(f,
      "// created by OpenBrf, Marco Tarini\n"
      "// exporting from a BRF resource file\n"
-    // "// rigged mesh: %s"
+    // "// skinned mesh: %s"
     // "// skeleton mesh: %s"
 "requires maya \"2008\";\n"
 "currentUnit -l centimeter -a degree -t film;\n"
@@ -790,7 +790,7 @@ static bool ioMB_importBone(BrfSkeleton &s ){
     if (!tmp) return false;
     if (tmp==1) {
       QString parentName = readStrQuotes(  );
-      b.attach = s.FindBoneByName(parentName.toAscii().data());
+      b.attach = s.FindBoneByName(parentName.toLatin1().data());
       if (b.attach==-1) {
         lastErr = QString("Can't find bone \"%1\"").arg(parentName);
         return false;
@@ -874,7 +874,7 @@ bool IoMB::Import(const wchar_t*filename, std::vector<BrfMesh> &m , BrfSkeleton 
 
   while (nextCreateNode()) {
     QString t =  token();
-    fprintf(debug,"[%s]\n",t.toAscii().data()); fflush(debug);
+    fprintf(debug,"[%s]\n",t.toLatin1().data()); fflush(debug);
     if (t=="joint") {
       if (want ==1) if (!ioMB_importBone(s)) return false;
     }
@@ -886,7 +886,7 @@ bool IoMB::Import(const wchar_t*filename, std::vector<BrfMesh> &m , BrfSkeleton 
       }
     }
     if (t=="skinCluster"){
-      //qDebug("rigging");
+      //qDebug("skinning");
 
       if (want==0) {
         int n = ioMB_importRiggingSize();
@@ -918,6 +918,6 @@ bool IoMB::Import(const wchar_t*filename, std::vector<BrfMesh> &m , BrfSkeleton 
 }
 
 char* IoMB::LastErrorString(){
-  return lastErr.toAscii().data();
+  return lastErr.toLatin1().data();
 }
 

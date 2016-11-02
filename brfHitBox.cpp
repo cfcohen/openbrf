@@ -37,11 +37,11 @@ static bool qDomElement_to_BrfBodyPart(const QDomElement & n, BrfBodyPart & p){
       if (n.attribute("for_ragdoll_only","0").toInt()==1) p.flags = 1;
       //p.dir -= p.center;
       //p.center -= p.dir;
-      //if (!ok) qDebug("WRONG (%s)", n.attribute("radius").toAscii().data());
+      //if (!ok) qDebug("WRONG (%s)", n.attribute("radius").toLatin1().data());
       return ok;
   } else {
       p.SetEmpty();
-      //qDebug("UNKOWN (%s)", type.toAscii().data());
+      //qDebug("UNKOWN (%s)", type.toLatin1().data());
       return false;
   }
 }
@@ -91,14 +91,14 @@ static bool BrfBody_to_qDomElement(const BrfBody & b, QDomElement &skelNode, QDo
     QDomElement bonesNode = skelNode.firstChildElement("Bones");
     if (bonesNode.isNull()) {
         BrfData::LastHitBoxesLoadSaveError("%ls No 'Bones' node found in XML skel \"%s\"",
-           filename,skelNode.attribute("name").toAscii().data());
+           filename,skelNode.attribute("name").toLatin1().data());
         return false;
     }
 
     QDomElement boneNode = bonesNode.firstChildElement("Bone");
     if (bonesNode.isNull()) {
         BrfData::LastHitBoxesLoadSaveError("%ls No 'Bone' node found in 'Bones' of XML skel \"%s\"",
-           filename,skelNode.attribute("name").toAscii().data());
+           filename,skelNode.attribute("name").toLatin1().data());
         return false;
     }
 
@@ -106,9 +106,9 @@ static bool BrfBody_to_qDomElement(const BrfBody & b, QDomElement &skelNode, QDo
     while (!boneNode.isNull()) {
       if (k>=(int)b.part.size()) {
           qDebug("ERROR saving brf-part %d of brf-body '%s' (over xml-bone '%s' of xml-skel %s)",
-                 k,b.name,boneNode.attribute("name").toAscii().data(),skelNode.attribute("name").toAscii().data());
+                 k,b.name,boneNode.attribute("name").toLatin1().data(),skelNode.attribute("name").toLatin1().data());
           BrfData::LastHitBoxesLoadSaveError("Too many bones %ls:\n in base hitbox %s with respect to skeleton %s ",
-             filename,b.name, skelNode.attribute("name").toAscii().data() );
+             filename,b.name, skelNode.attribute("name").toLatin1().data() );
           return false;
       }
 
@@ -140,13 +140,14 @@ static bool BrfBody_to_qDomElement(const BrfBody & b, QDomElement &skelNode, QDo
     }
     if (k!=(int)b.part.size()){
         BrfData::LastHitBoxesLoadSaveError("Too many bones (file %ls):\n in base hitbox %s with respect to skeleton %s",
-           filename,b.name, skelNode.attribute("name").toAscii().data());
+           filename,b.name, skelNode.attribute("name").toLatin1().data());
         return false;
     }
     return true;
 }
 
 char* BrfData::LastHitBoxesLoadSaveError(const char *st, const wchar_t *subst1, const char *subst2, const char *subst3){
+    return NULL; /* avoid funny bugs!  */
   static char str[512];
   if (st && subst1 && subst2 && subst3) {
     sprintf(str, st, subst1, subst2, subst3);
@@ -233,7 +234,7 @@ int BrfData::SaveHitBoxesToXml(const wchar_t *fin, const wchar_t *fout) {
         return 0; // file not found
     }
 
-    fileout.write(doc.toString(1).toAscii());
+    fileout.write(doc.toString(1).toLatin1());
     //doc.save(fileout,0);
     fileout.close();
 
@@ -243,8 +244,11 @@ int BrfData::SaveHitBoxesToXml(const wchar_t *fin, const wchar_t *fout) {
 
 int BrfData::LoadHitBoxesFromXml(const wchar_t *filename) {
 
+
   Clear();
+
   QString fn = QString::fromWCharArray(filename);
+
   QFile file( fn );
   if( !file.open( QIODevice::ReadOnly ) ) {
       LastHitBoxesLoadSaveError("Could not open '%ls' for reading.",filename);
@@ -258,6 +262,8 @@ int BrfData::LoadHitBoxesFromXml(const wchar_t *filename) {
       return 0; // file not found
   }
   file.close();
+
+
   QDomElement root = doc.documentElement();
   QDomNode n = root;
 
@@ -279,7 +285,7 @@ int BrfData::LoadHitBoxesFromXml(const wchar_t *filename) {
   n = n.firstChildElement("Skeleton");
   while (!n.isNull()) {
       QString skelName = n.toElement().attribute("name");
-      //qDebug("Skeleton '%s'",skelName.toAscii().data() );
+      //qDebug("Skeleton '%s'",skelName.toLatin1().data() );
       QDomNode n1 = n.firstChildElement("Bones");
       n1 = n1.firstChildElement("Bone");
 
@@ -287,7 +293,7 @@ int BrfData::LoadHitBoxesFromXml(const wchar_t *filename) {
 
       while (!n1.isNull()) {
         QString boneName = n1.toElement().attribute("name");
-        // qDebug("  bone '%s'",boneName.toAscii().data() );
+        // qDebug("  bone '%s'",boneName.toLatin1().data() );
         QDomNode n2 = n1.firstChildElement("Bodies");
         n2 = n2.firstChildElement("body");
 
@@ -309,7 +315,7 @@ int BrfData::LoadHitBoxesFromXml(const wchar_t *filename) {
       }
 
       if (newBody.part.size()>0) {
-          sprintf(newBody.name, "%s",skelName.toAscii().data());
+          sprintf(newBody.name, "%s",skelName.toLatin1().data());
           newBody.SetOriginalSkeletonName(newBody.name); // remember I was originated from myself
 
           //qDebug("Saving string: '%s'",newBody.name);

@@ -3,7 +3,7 @@
 #ifndef ASKTRANSFORMDIALOG_H
 #define ASKTRANSFORMDIALOG_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 
 
 namespace Ui {
@@ -20,10 +20,12 @@ public:
 
     float* matrix;
     bool* applyToAll;
+    bool* applyToAllFrames;
 
     void setApplyToAllLoc(bool *loc);
     void setSensitivityOne(double sens); // sets sensibility of transform when moving a single object
     void setSensitivityAll(double sens); // ... or when moving multiple objects
+    void setOneFrameOnly(bool );
     void setMultiObj(bool);
 
     void applyAlignments();

@@ -3,6 +3,9 @@
 
 
 #include <QtGui>
+#include <QMenu>
+#include <QListView>
+#include <QShortcut>
 #include "brfData.h"
 #include "selector.h"
 #include "iniData.h"
@@ -103,14 +106,26 @@ Selector::Selector(QWidget *parent)
 	addShortCuttedAction(moveUpAct);
 
 	moveDownAct = new QAction(tr("Move down in the list"), this);
-	moveDownAct->setShortcut(QString("Alt+down"));
+    moveDownAct->setShortcut(QString("Alt+down"));
 	moveDownAct->setStatusTip(tr("Move this object one step down in the list"));
 	connect(moveDownAct, SIGNAL(triggered()), parent, SLOT(moveDownSel()));
 	addShortCuttedAction(moveDownAct);
 
+    QShortcut *movePgDownSc = new QShortcut(QString("Alt+PgDown"), this);
+    QShortcut *movePgUpSc = new QShortcut(QString("Alt+PgUp"), this);
+    QShortcut *moveAllDownSc = new QShortcut(QString("Alt+End"), this);
+    QShortcut *moveAllUpSc = new QShortcut(QString("Alt+Home"), this);
+
+
+    connect(movePgDownSc, SIGNAL(activated()), parent, SLOT(moveDownPageSel()));
+    connect(movePgUpSc, SIGNAL(activated()), parent, SLOT(moveUpPageSel()));
+    connect(moveAllDownSc, SIGNAL(activated()), parent, SLOT(moveDownAllSel()));
+    connect(moveAllUpSc, SIGNAL(activated()), parent, SLOT(moveUpAllSel()));
+
+
 
 	addToRefAnimAct = new QAction(tr("Add to reference animations"), this);
-	addToRefAnimAct->setStatusTip(tr("Add this animation to reference animations (to use it later to display rigged meshes)."));
+	addToRefAnimAct->setStatusTip(tr("Add this animation to reference animations (to use it later to display skinned meshes)."));
 
 	addToRefSkelAct = new QAction(tr("Add to reference skeletons"), this);
 	addToRefSkelAct->setStatusTip(tr("Add this animation to reference skeletons (to use it later for animations)."));
@@ -187,21 +202,21 @@ Selector::Selector(QWidget *parent)
 	exportBodyGroupManyFilesAct = new QAction(tr("Export all..."), this);
 	exportBodyGroupManyFilesAct->setStatusTip(tr("Export each of these collison bodies as separate files."));
 
-	exportRiggedMeshAct = new QAction(tr("Export rigged mesh..."), this);
-	exportRiggedMeshAct->setStatusTip(tr("Export this model (or this frame) as a rigged mesh."));
+	exportSkinnedMeshAct = new QAction(tr("Export skinned mesh..."), this);
+	exportSkinnedMeshAct->setStatusTip(tr("Export this model (or this frame) as a skinned mesh."));
 
 	exportSkeletonAct = new QAction(tr("Export (nude) skeleton..."), this);
 	exportSkeletonAct ->setStatusTip(tr("Export this skeleton (as a set of nude bones)."));
 	exportSkinAct = new QAction(tr("Export skeleton with skin..."), this);
-	exportSkinAct->setStatusTip(tr("Export this skeleton (as a rigged skin)."));
+	exportSkinAct->setStatusTip(tr("Export this skeleton (as a skinned skin)."));
 	exportSkinForAnimationAct     = new QAction(tr("Export a skin for this ani"), this);
-	exportSkinForAnimationAct->setStatusTip(tr("Export a rigged skin which can be used for this animation."));
+	exportSkinForAnimationAct->setStatusTip(tr("Export a skinned skin which can be used for this animation."));
 
 	aniToVertexAniAct = new QAction(tr("Convert into vertex animation"),this);
 	aniToVertexAniAct->setStatusTip(tr("Convert skeletal animation into a vertex animation using current skin and skeleton"));
 
 	meshToVertexAniAct = new QAction(tr("Convert into vertex animation"),this);
-	meshToVertexAniAct->setStatusTip(tr("Convert rigged mesh into a vertex animation using current animation and skeleton"));
+	meshToVertexAniAct->setStatusTip(tr("Convert skinned mesh into a vertex animation using current animation and skeleton"));
 
 	exportAnimationAct = new QAction(tr("Export animation..."), this);
 	exportAnimationAct->setStatusTip(tr("Export this animation."));
@@ -215,19 +230,19 @@ Selector::Selector(QWidget *parent)
 
 
 	reskeletonizeAct = new QAction(tr("Reskeletonize..."), this);
-	reskeletonizeAct->setStatusTip(tr("Adapt this rigged mesh to a new skeleton"));
+	reskeletonizeAct->setStatusTip(tr("Adapt this skinned mesh to a new skeleton"));
 
 	aniReskeletonizeAct = new QAction(tr("Reskeletonize..."), this);
 	aniReskeletonizeAct->setStatusTip(tr("Adapt this animation to a new skeleton"));
 
-	transferRiggingAct = new QAction(tr("Transfer rigging"), this);
-	transferRiggingAct->setStatusTip(tr("Copy rigging from one mesh to another"));
+    transferRiggingAct = new QAction(tr("Transfer skinning"), this);
+    transferRiggingAct->setStatusTip(tr("Copy skinning from one mesh to another"));
 
-	stiffenRiggingAct = new QAction(tr("Make rigging stiffer"), this);
-	stiffenRiggingAct->setStatusTip(tr("Make the rigging of selected mesh(es) somewhat rigidier"));
+    stiffenRiggingAct = new QAction(tr("Make skinning stiffer"), this);
+    stiffenRiggingAct->setStatusTip(tr("Make the skinning of selected mesh(es) somewhat rigidier"));
 
-	smoothenRiggingAct = new QAction(tr("Make rigging softer"), this);
-	smoothenRiggingAct->setStatusTip(tr("Make the rigging of selected mesh(es) somewhat softer."));
+    smoothenRiggingAct = new QAction(tr("Make skinning softer"), this);
+    smoothenRiggingAct->setStatusTip(tr("Make the skinning of selected mesh(es) somewhat softer."));
 
 	flipAct = new QAction(tr("Mirror"), this);
 	flipAct->setStatusTip(tr("Mirror this object on the X axis."));
@@ -259,8 +274,8 @@ Selector::Selector(QWidget *parent)
 	meshUvTransformAct = new QAction(tr("Transfrom texture coords"),this);
 	meshUvTransformAct->setStatusTip(tr("Translates/Scales/Flips UV coords"));
 
-	meshFixRiggingRigidParts = new QAction(tr("Quick fix rigging of rigid-parts"), this);
-	meshFixRiggingRigidParts->setStatusTip(tr("Attempts to fix rigging of small-parts, making them rigid"));
+    meshFixRiggingRigidParts = new QAction(tr("Quick fix skinning of rigid-parts"), this);
+    meshFixRiggingRigidParts->setStatusTip(tr("Attempts to fix skinning of small-parts, making them rigid"));
 
 	meshSubdivideIntoComponents = new QAction(tr("Split into connected sub-meshes"), this);
 	meshSubdivideIntoComponents->setStatusTip(tr("Create a separate mesh for each connected component of this mesh."));
@@ -311,19 +326,19 @@ Selector::Selector(QWidget *parent)
 	discardHitboxAct = new QAction(tr("Discard hit-boxes"), this);
 	discardHitboxAct->setStatusTip(tr("Discard hit-box set associated to skeletons with this name"));
 
-	meshFreezeFrameAct = new QAction(tr("rigging (freeze current pose)"), this);
-	meshFreezeFrameAct->setStatusTip(tr("Discard rigging, but freeze mesh in its current pose"));
+    meshFreezeFrameAct = new QAction(tr("skinning (freeze current pose)"), this);
+    meshFreezeFrameAct->setStatusTip(tr("Discard skinning, but freeze mesh in its current pose"));
 
-	meshUnmountAct = new QAction(tr("rigging (un-mount from bone)"),this);
-	meshUnmountAct->setStatusTip(tr("Discard rigging, and move object back at origin."));
+    meshUnmountAct = new QAction(tr("skinning (un-mount from bone)"),this);
+    meshUnmountAct->setStatusTip(tr("Discard skinning, and move object back at origin."));
 
 	meshAniMergeAct = new QAction(tr("Merge as frames in a vertex ani"), this);
 	meshAniMergeAct->setStatusTip(tr("Merge these meshes, in their current order, as frames in a mesh ani"));
 
 	discardColAct = new QAction(tr("per-vertex color"), this);
 	discardColAct->setStatusTip(tr("Reset per-vertex coloring (i.e. turn all full-white)"));
-	discardRigAct = new QAction(tr("rigging"), this);
-	discardRigAct->setStatusTip(tr("Discard rigging (per-verex bone attachments)"));
+    discardRigAct = new QAction(tr("skinning"), this);
+    discardRigAct->setStatusTip(tr("Discard skinning (per-verex bone attachments)"));
 	discardTanAct = new QAction(tr("tangent directions"), this);
 	discardTanAct->setStatusTip(tr("Remove tangent directions (saves space, they are needed mainly for bumbmapping)"));
 	discardNorAct = new QAction(tr("normals"), this);
@@ -336,6 +351,7 @@ Selector::Selector(QWidget *parent)
 	exportSkeletonModAct = new QAction(tr("Make a skeleton-modification mesh..."), this);
 	importSkeletonModAct = new QAction(tr("Modify from a skeleton-modification mesh..."), this);
 
+    scaleSkeletonAct = new QAction(tr("Rescale..."), this);
 	//hitboxToBodyAct = new QAction(tr("Turn hitboxes to collision-body"), this);
 	//bodyToHitboxAct = new QAction(tr("Use this collision for hitboxes of same-named skel"), this);
 	//saveSkeletonHitboxAct = new QAction(tr("Save hit-boxes in XML..."), this);
@@ -373,7 +389,7 @@ Selector::Selector(QWidget *parent)
 
 	//connect(exportAnyBrfAct, SIGNAL(triggered()),parent,SLOT(exportBrf()));
 	connect(exportStaticMeshAct, SIGNAL(triggered()),parent,SLOT(exportStaticMesh()));
-	connect(exportRiggedMeshAct, SIGNAL(triggered()),parent,SLOT(exportRiggedMesh()));
+	connect(exportSkinnedMeshAct, SIGNAL(triggered()),parent,SLOT(exportSkinnedMesh()));
 	connect(exportMovingMeshAct, SIGNAL(triggered()),parent,SLOT(exportMovingMesh()));
 	connect(exportMeshGroupAct, SIGNAL(triggered()),parent,SLOT(exportMeshGroup()));
 	connect(exportMeshGroupManyFilesAct, SIGNAL(triggered()),parent,SLOT(exportMeshGroupManyFiles()));
@@ -396,6 +412,8 @@ Selector::Selector(QWidget *parent)
 	connect(scaleAct, SIGNAL(triggered()),parent,SLOT(scale()));
 	connect(exportBodyAct, SIGNAL(triggered()), parent, SLOT(exportCollisionBody()));
 	connect(shiftAniAct, SIGNAL(triggered()),parent,SLOT(shiftAni()));
+
+    connect(scaleSkeletonAct, SIGNAL(triggered()), parent, SLOT(skeletonScale()) );
 
 	connect(aniToVertexAniAct, SIGNAL(triggered()), parent, SLOT(aniToVertexAni()));
 	connect(meshToVertexAniAct, SIGNAL(triggered()),parent, SLOT(meshToVertexAni()));
@@ -442,16 +460,16 @@ Selector::Selector(QWidget *parent)
 
 		if (ti==MESH || ti==MATERIAL || ti==BODY || ti==TEXTURE || ti==SKELETON || ti==ANIMATION) {
 			tab[ti]->setSelectionMode(QAbstractItemView::ExtendedSelection);
-			QString msg =  tr("[Right-Click]: tools for %1. Multiple selections with [Shift] or [Ctrl].").arg(IniData::tokenFullName(ti));
-			if (ti==MESH) { if (msg.endsWith('.')) msg.chop(1);  msg.append(" or [Alt]."); }
+            QString msg =  tr("[Right-Click]: tools for %1. [Shift]/[Ctrl]+[Click]: Multi-sel.").arg(IniData::tokenFullName(ti));
+            if (ti==MESH) {  msg.append(tr(" [Double-Click]: select whole.")); }
 			tab[ti]->setStatusTip(msg);
 		}
 		else
 			tab[ti]->setStatusTip(QString(tr("[Right-Click]: tools for %1.")).arg(IniData::tokenFullName(ti)));
 
-		if (ti==MESH) connect(tab[ti],
-		        SIGNAL(clicked(QModelIndex)),
-		        this, SLOT(onClicked(QModelIndex)) );
+        if (ti==MESH) connect(tab[ti],
+                SIGNAL(doubleClicked(QModelIndex)),
+                this, SLOT(onDoubleClicked(QModelIndex)) );
 
 		connect(tab[ti]->selectionModel(),
 		        SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
@@ -473,20 +491,33 @@ Selector::Selector(QWidget *parent)
 
 void Selector::moveSel(int dx){
 	QListView* c=(QListView*)this->currentWidget();
+    if (!c) return;
 
-	if (c) {
-		QModelIndex li=c->selectionModel()->selectedIndexes()[0];
+    QModelIndexList list = c->selectionModel()->selectedIndexes();
+
+    std::sort(list.begin(), list.end() );
+    if (dx>0) std::reverse(list.begin(), list.end() );
+
+    blockSignals(true);
+    c->selectionModel()->blockSignals(true);
+    //c->clearSelection();
+
+    QItemSelection sel;
+    for (QModelIndex &li: list){
+
 		QModelIndex lj=li.sibling(li.row()+dx,li.column());
-		if (lj.isValid()) {
-			c->selectionModel()->blockSignals(true);
-			c->clearSelection();
-			c->selectionModel()->select(lj,QItemSelectionModel::Select);
-			c->selectionModel()->setCurrentIndex(lj,QItemSelectionModel::NoUpdate);
-			c->setCurrentIndex( lj );
-			c->setFocus();
-			c->selectionModel()->blockSignals(false);
-		}
-	}
+        if (!lj.isValid())  lj = li;
+        if (sel.contains(lj)) lj = li;
+        //qDebug("move %d to %d...",li.row(), lj.row());
+        sel.push_back( QItemSelectionRange( lj ));
+        c->selectionModel()->setCurrentIndex(lj,QItemSelectionModel::NoUpdate);
+        c->setCurrentIndex( lj );
+        c->setFocus();
+        c->scrollTo(lj,QAbstractItemView::EnsureVisible);
+    }
+    c->selectionModel()->select(sel,QItemSelectionModel::Select);
+    c->selectionModel()->blockSignals(false);
+    blockSignals(false);
 }
 
 
@@ -525,6 +556,16 @@ int Selector::lastSelected() const{
 	     ->selectionModel()->selectedIndexes())[s-1].row();
 }
 
+std::vector<int> Selector::allSelected() const{
+    if (!this->currentWidget()) return std::vector<int>();
+    std::vector<int> res;
+    for (QModelIndex &mi : ((QListView*)(this->currentWidget()))
+         ->selectionModel()->selectedIndexes() ) {
+        res.push_back( mi.row() );
+    }
+    return res;
+
+}
 QModelIndexList Selector::selectedList() const{
 	if (!this->currentWidget()) return QModelIndexList();
 	return
@@ -558,14 +599,14 @@ void Selector::updateData(const BrfData &data){
 
 void Selector::selectAll(){
 	int kind = currentTabName();
-	assert(kind>=0 && kind<N_TOKEN);
+    if (!(kind>=0 && kind<N_TOKEN) ) return;
 	QListView* c=tab[kind];
 	MyTableModel* m = tableModel[kind];
 
 	if (c) {
 		QModelIndex li0 = m->pleaseCreateIndex(0,0);
 		QModelIndex li1 = m->pleaseCreateIndex(m->size()-1,0);
-		c->selectionModel()->select(QItemSelection(li0,li1), QItemSelectionModel::Select);
+        c->selectionModel()->select(QItemSelection(li0,li1), QItemSelectionModel::Select);
 	}
 	onChanged();
 }
@@ -638,12 +679,13 @@ void Selector::updateContextMenu(){
 	contextMenu->addAction(removeAct);
 	if (onesel) renameAct->setText(tr("Rename...")); else renameAct->setText(tr("Group rename..."));
 	contextMenu->addAction(renameAct);
-	if (onesel) {
+    /*if (onesel) {*/
 		contextMenu->addAction(duplicateAct);
-		//contextMenu->addSeparator();
-		contextMenu->addAction(moveUpAct);
-		contextMenu->addAction(moveDownAct);
-	}
+    /*}*/
+    contextMenu->addAction(moveUpAct);
+    contextMenu->addAction(moveDownAct);
+    contextMenu->addSeparator();
+
 
 	if (onesel){
 
@@ -676,6 +718,7 @@ void Selector::updateContextMenu(){
 					}
 					for (unsigned int i=0; i<s.size(); i++) if (i<MAX_USED_BY){
 						usedByAct[i]->setText(iniData->nameFull( s[i] ));
+                        //qDebug("Added: [%d] %s",i, iniData->nameFull( s[i] ).toLatin1().data());
 						m->addAction( usedByAct[i] );
 					}
 					if (m->actions().size()==0){
@@ -692,8 +735,8 @@ void Selector::updateContextMenu(){
 
 		if (t==MESH) {
 			contextMenu->addAction(exportStaticMeshAct);
-			if (data->mesh[ seli ].IsRigged())
-				contextMenu->addAction(exportRiggedMeshAct);
+			if (data->mesh[ seli ].IsSkinned())
+				contextMenu->addAction(exportSkinnedMeshAct);
 			if (data->mesh[ seli ].frame.size()>1)
 				contextMenu->addAction(exportMovingMeshAct);
 			contextMenu->addAction(reimportMeshAct);
@@ -703,13 +746,14 @@ void Selector::updateContextMenu(){
 			contextMenu->addAction(exportSkeletonAct);
 			contextMenu->addAction(exportSkinAct);
 			contextMenu->addSeparator();
-			contextMenu->addAction(exportSkeletonModAct);
+            contextMenu->addAction(scaleSkeletonAct);
+            contextMenu->addAction(exportSkeletonModAct);
 			contextMenu->addAction(importSkeletonModAct);
 			//contextMenu->addAction(saveSkeletonHitboxAct);
 			//contextMenu->addAction(hitboxToBodyAct);
 			//contextMenu->addAction(importSkeletonHitboxAct);
 			contextMenu->addAction(discardHitboxAct);
-		}
+        }
 		if (t==ANIMATION){
 			contextMenu->addAction(exportAnimationAct);
 			contextMenu->addAction(exportSkinForAnimationAct);
@@ -738,7 +782,7 @@ void Selector::updateContextMenu(){
 		if (t==MESH) {
 			const BrfMesh &mesh(data->mesh[ seli ]);
 			if (!sep) contextMenu->addSeparator();
-			if (mesh.IsRigged()) {
+			if (mesh.IsSkinned()) {
 				contextMenu->addAction(reskeletonizeAct);
 				contextMenu->addAction(meshFemininizeAct);
 				contextMenu->addAction(meshFixRiggingRigidParts);
@@ -787,13 +831,13 @@ void Selector::updateContextMenu(){
 			m->addAction(meshUnmountAct);
 			addDataToAllActions(m,"Discard ");
 
-			discardRigAct->setEnabled(mulsel || mesh.IsRigged());
+			discardRigAct->setEnabled(mulsel || mesh.IsSkinned());
 			discardAniAct->setEnabled(mulsel || mesh.HasVertexAni());
-			meshFreezeFrameAct->setEnabled(mulsel || mesh.IsRigged());
-			meshUnmountAct->setEnabled(mulsel || mesh.IsRigged());
+			meshFreezeFrameAct->setEnabled(mulsel || mesh.IsSkinned());
+			meshUnmountAct->setEnabled(mulsel || mesh.IsSkinned());
 			discardColAct->setEnabled(mulsel || mesh.hasVertexColor);
 			discardNorAct->setEnabled( true );
-			discardTanAct->setEnabled(mulsel || mesh.HasTangentField());
+            discardTanAct->setEnabled(mulsel || mesh.StoresTangentField());
 
 
 			contextMenu->addSeparator();
@@ -982,19 +1026,51 @@ int Selector::currentIndexOnList() const{
 }
 
 
+void Selector::selectMany(std::vector<int> v){
+    int kind = currentTabName();
+    if (kind<0 || kind>=N_TOKEN) return;
+    bool unselect = (QApplication::keyboardModifiers()&Qt::ControlModifier);
+
+    QListView* c=tab[kind];
+    if (c) {
+
+        this->setCurrentWidget(c);
+        c->setFocus();
+        if (!unselect) c->clearSelection();
+
+        QItemSelection qis;
+        for (unsigned int i=0; i<v.size(); i++){
+            QModelIndex li = tableModel[kind]->pleaseCreateIndex(v[i],0);
+            c->scrollTo(li,QAbstractItemView::PositionAtCenter);
+            if (i==0) {
+                c->selectionModel()->setCurrentIndex(li,QItemSelectionModel::Select);//NoUpdate);
+                c->setCurrentIndex(li);
+            }
+            qis.append( QItemSelectionRange(li));
+        }
+
+        c->selectionModel()->select(
+                    qis,
+                    (unselect) ? QItemSelectionModel::Deselect : QItemSelectionModel::ClearAndSelect );
+        onChanged();
+    }
+}
+
 void Selector::selectOne(int kind, int i){
 	assert(kind>=0 && kind<N_TOKEN);
 	QListView* c=tab[kind];
 	if (c) {
-		c->clearSelection();
-		QModelIndex li = tableModel[kind]->pleaseCreateIndex(i,0);
-		c->selectionModel()->setCurrentIndex(li,QItemSelectionModel::NoUpdate);
-		c->selectionModel()->select(li,QItemSelectionModel::Select);
-		c->setCurrentIndex(li);
-		c->scrollTo(li,QAbstractItemView::PositionAtCenter);
+        this->setCurrentWidget(c);
+        c->setFocus();
+        QModelIndex li = tableModel[kind]->pleaseCreateIndex(i,0);
+        c->scrollTo(li,QAbstractItemView::EnsureVisible);
 
-		this->setCurrentWidget(c);
-		c->setFocus();
+        c->clearSelection();
+
+        c->selectionModel()->setCurrentIndex(li,QItemSelectionModel::ClearAndSelect);//NoUpdate);
+        c->setCurrentIndex(li);
+
+        c->selectionModel()->select(li,QItemSelectionModel::ClearAndSelect);//Select
 
 	}
 	onChanged();
@@ -1006,28 +1082,13 @@ void Selector::selectOneSilent(int kind, int i){
 	QListView* c=tab[kind];
 	if (c) {
 		c->selectionModel()->blockSignals(true);
-		c->clearSelection();
-		QModelIndex li = tableModel[kind]->pleaseCreateIndex(i,0);
-		c->selectionModel()->setCurrentIndex(li,QItemSelectionModel::NoUpdate);
-		c->selectionModel()->select(li,QItemSelectionModel::Select);
-		c->setCurrentIndex(li);
-		c->scrollTo(li,QAbstractItemView::PositionAtCenter);
-
-		this->setCurrentWidget(c);
-		c->setFocus();
+        selectOne(kind,i);
 		c->selectionModel()->blockSignals(false);
-
 	}
 	onChanged();
 }
 
-void Selector::onClicked(const QModelIndex & mi){
-	//qDebug("click");
-
-	bool alt = QApplication::keyboardModifiers()&Qt::AltModifier;
-
-	if(!alt) return;
-
+void Selector::onDoubleClicked(const QModelIndex & mi){
 
 	if (!data) return;
 
@@ -1043,7 +1104,7 @@ void Selector::onClicked(const QModelIndex & mi){
 	QItemSelectionModel *m = t->selectionModel();
 	if (!m) return;
 
-	bool selected = m->isSelected( mi );
+    //bool selected = m->isSelected( mi );
 	int i = mi.row();
 	if (i<0) return;
 	if (i>=(int) data->mesh.size()) return;
@@ -1072,13 +1133,6 @@ void Selector::onClicked(const QModelIndex & mi){
 	}
 	//t->grabKeyboard();
 
-	qDebug("Alt-click on %d (%s) (%s): selected %d items (%d)",i,
-	   meshName.toAscii().data(),
-	  (selected)?"select":"deselect",
-	  newSel.count(),
-	  m->selectedIndexes().size()
-	);
-
 }
 
 void Selector::keyPressEvent(QKeyEvent * e){
@@ -1101,8 +1155,9 @@ void Selector::onChanged(){
 			return;
 		}
 	}
-	//static QModelIndexList empty;
-	//emit setSelection(empty , NONE );
+    // no tab exists (empty dataset)
+    static QModelIndexList empty;
+    emit setSelection(empty , NONE );
 }
 
 void Selector::setup(const BrfData &_data){

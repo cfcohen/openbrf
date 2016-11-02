@@ -10,7 +10,7 @@
 // everything is scaled up when expoerted, down when imported...
 static const float SCALE = 10.0f;
 
-// used to export/import skeletons, rigged meshes, animations...
+// used to export/import skeletons, skinned meshes, animations...
 // return 0 on success. +... on error. -... on warnings
 
 static float Norm(const Matrix44f &m){
@@ -37,7 +37,7 @@ float* matrix2euler(const Matrix44f &_m){
   Matrix44f m = _m;
   m = inv*m.transpose()*inv;
   m.ToEulerAngles(res[0], res[1], res[2]);
-	if (res[1]!=res[1]) res[1]=-M_PI/2;
+    if (res[1]!=res[1]) res[1]=-(float)M_PI/2;
   if (fabs(fabs(res[1])-M_PI/2)<0.000001) {
     // ouch: pivot angle... let's try everythin...
     float best = 1000;
@@ -136,7 +136,7 @@ static bool ioSMD_ImportTriangles(FILE*f, BrfMesh &m ){
       Point3f n;
       Point2f t;
       char line[4096];
-      BrfRigging r;
+      BrfSkinning r;
       int nr=0;
       fscanln(f, line);
       int nread =
@@ -179,7 +179,7 @@ static bool ioSMD_ImportTriangles(FILE*f, BrfMesh &m ){
       m.frame[0].pos.push_back(p);
       m.frame[0].norm.push_back(n);
 
-      m.rigging.push_back(r);
+      m.skinning.push_back(r);
       pi++;
     }
     m.face.push_back( BrfFace( pi-3, pi-2, pi-1 ) );
@@ -189,7 +189,7 @@ static bool ioSMD_ImportTriangles(FILE*f, BrfMesh &m ){
 
 static void ioSMD_ExportTriangles(FILE*f,const BrfMesh &m , int fi){
   fprintf(f,"triangles\n");
-  assert(m.rigging.size()==m.frame[fi].pos.size());
+  assert(m.skinning.size()==m.frame[fi].pos.size());
   for (unsigned int i=0; i<m.face.size(); i++){
     if (m.material[0]==0)
       fprintf(f,"%s\n","material_name");
@@ -199,7 +199,7 @@ static void ioSMD_ExportTriangles(FILE*f,const BrfMesh &m , int fi){
       int vi = m.face[i].index[w]; // vertex index
       int pi = m.vert[vi].index; // position index
       fprintf(f," %d %f %f %f %f %f %f %f %f",
-        m.rigging[pi].boneIndex[0],
+        m.skinning[pi].boneIndex[0],
         m.frame[fi].pos[pi][0]*SCALE,
         m.frame[fi].pos[pi][2]*SCALE,
         m.frame[fi].pos[pi][1]*SCALE,
@@ -210,11 +210,11 @@ static void ioSMD_ExportTriangles(FILE*f,const BrfMesh &m , int fi){
         1.0f-m.vert[vi].ta[1]
       );
       int nrig=0;
-      for (int j=0; j<4; j++) if (m.rigging[pi].boneIndex[j]!=-1) nrig++;
+      for (int j=0; j<4; j++) if (m.skinning[pi].boneIndex[j]!=-1) nrig++;
       if (nrig>0) {
         fprintf(f," %d",nrig); // number of links except 1st one
         for (int j=0; j<nrig; j++) {
-          fprintf(f," %d %f", m.rigging[pi].boneIndex[j], m.rigging[pi].boneWeight[j] );
+          fprintf(f," %d %f", m.skinning[pi].boneIndex[j], m.skinning[pi].boneWeight[j] );
         }
       }
       fprintf(f," \n");
@@ -439,7 +439,7 @@ bool ioSMD::Warning(){
 char* ioSMD::LastWarningString(){
   static char res[255];
   sprintf(res,
-    "WARNING: found vertices rigged to %d bones.\n"
+    "WARNING: found vertices skinned to %d bones.\n"
     "In M&B, limit is 4.",nMaxBones);
   return res;
 }

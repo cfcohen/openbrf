@@ -3,7 +3,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
+#include <QButtonGroup>
+#include <QLabel>
+
 //#include <map>
 
 #include "brfData.h"
@@ -78,6 +81,7 @@ private slots:
 	void notifyCheckboardChanged();
 	bool setEditingRef(bool mode);
 	bool setEditingVertexData(bool mode);
+    void setViewmodeMult(int i);
 
 	void closeEvent(QCloseEvent *event);
 	void newFile();
@@ -131,11 +135,9 @@ private slots:
 
 	void setSelection(const QModelIndexList &l,int);
 
-
 	void updateDataMaterial();
 	void updateDataShader();
 	void updateDataBody();
-
 
 	void updateTextureAccessDup();
 	void updateTextureAccessDel();
@@ -148,8 +150,8 @@ private slots:
 	bool exportBodyGroupManyFiles();
 	bool exportStaticMesh();
 	bool importStaticMesh();
-	bool exportRiggedMesh();
-	bool importRiggedMesh();
+	bool exportSkinnedMesh();
+	bool importSkinnedMesh();
 	bool importMovingMeshFrame();
 	bool exportMovingMesh();
 	bool importMovingMesh();
@@ -171,9 +173,17 @@ private slots:
 	bool reimportCollisionBody();
 
 	bool importBrf();
+
+    void moveSel(int dir);
+
 	void moveUpSel();
 	void moveDownSel();
-	void renameSel();
+    void moveUpPageSel();
+    void moveDownPageSel();
+    void moveUpAllSel();
+    void moveDownAllSel();
+
+    void renameSel();
 	void deleteSel();
 	void duplicateSel();
 	void addToRef(); // add current selected item to ref
@@ -238,6 +248,7 @@ private slots:
 	void learnFemininzation(); // from current selection
 	void optionFemininzationUseDefault();
 	void optionFemininzationUseCustom();
+    void optionSetAutocomputeTangents( bool );
 
 	void setFlagsShader();
 	void setFlagsShaderRequires();
@@ -260,6 +271,7 @@ private slots:
 	bool refreshSkeletonBodiesXml();
 	//bool saveSkeletonBodiesXml();
 	void skeletonDiscardHitbox();
+    void skeletonScale();
 
 	void openModuleIniFile();
 	bool openNextInMod();
@@ -303,7 +315,7 @@ private slots:
 	void repeatLastCommand();
 	void setUseOpenGL2(bool);
 	void setNormalmap(int);
-	void setSpecularmap(int);
+    void setSpecularmap(int);
 	void updateSelectedMenu();
 
 public slots:
@@ -358,7 +370,7 @@ private:
 	template<class BrfType> void getAllFlags(const vector<BrfType> &v, unsigned int &orr, unsigned int &andd);
 	template<class BrfType> bool setAllFlags(vector<BrfType> &v, unsigned int toZero, unsigned int toOne);
 
-	bool makeMeshRigged( BrfMesh &m, bool becauseAddToRef , bool askUserAgain );
+	bool makeMeshSkinned( BrfMesh &m, bool becauseAddToRef , bool askUserAgain );
 
 	bool mustOverwriteColors(); // if false, must multiply colors instead
 
@@ -522,6 +534,7 @@ private:
 
 	QPair<ObjCoord , QString > navigationStack[2];
 
+    QAction *optionAutoComputeTangents;
 	QAction *optionAfterMeshLoadMerge;
 	QAction *optionAfterMeshLoadRecompute;
 	QAction *optionAfterMeshLoadNothing;
@@ -558,7 +571,7 @@ private:
 
 	QAction
 	*importStaticMeshAct,
-	*importRiggedMeshAct,
+	*importSkinnedMeshAct,
 	*importMovingMeshFrameAct,
 	*importMovingMeshAct,
 	*importSkeletonAct,

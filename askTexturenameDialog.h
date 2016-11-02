@@ -3,7 +3,7 @@
 #ifndef ASKTEXTURENAMEDIALOG_H
 #define ASKTEXTURENAMEDIALOG_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 
 namespace Ui {
     class askTexturenameDialog;

@@ -206,7 +206,7 @@ int VcgMesh::simplify(int percFaces){
   qparams.QualityThr  =.3;
   float TargetError=numeric_limits<float>::max();
   //MyTriEdgeCollapse::Params().SafeHeapUpdate=true;
-	qparams.SafeHeapUpdate = true;
+  //qparams.SafeHeapUpdate = true;
   qparams.QualityCheck	= true;
   qparams.NormalCheck	= true;
   qparams.OptimalPlacement	= false;
@@ -565,7 +565,9 @@ static Point3f _flipZ(const Point3f p){
 
 void VcgMesh::add(const BrfMesh &b, int fi){
   mesh.Clear();
+  mesh.textures.clear();
   if ((int)b.frame.size()<=fi) fi=b.frame.size()-1;
+
 
   mesh.textures.push_back(b.material);
   CMesh::FaceIterator f=vcg::tri::Allocator<CMesh>::AddFaces( mesh , b.face.size() );
@@ -677,7 +679,7 @@ BrfMesh VcgMesh::toBrfMesh(){
   }
 
   b.AdjustNormDuplicates();
-  b.rigging.clear();
+  b.skinning.clear();
   b.flags=0;
   if (!gotNormals()) b.ComputeNormals();
   b.AfterLoad();

@@ -1,4 +1,7 @@
 /* OpenBRF -- by marco tarini. Provided under GNU General Public License */
+//#include <QtGui>
+#include <QCompleter>
+#include <QMenu>
 
 #include "guipanel.h"
 #include "ui_guipanel.h"
@@ -6,7 +9,6 @@
 #include "brfData.h"
 #include "iniData.h"
 
-#include <QtGui>
 
 static void alignY(QWidget *a, const QWidget *b){
   QRect ar = a->geometry();
@@ -701,21 +703,25 @@ void myClear(QSpinBox *qsb){
   qsb->blockSignals(false);
 }
 void mySetText(QLineEdit *l, QString s){
-  l->blockSignals(true);
-  QString old = l->text();
-  if (l->hasFrame() && old.isEmpty() ) l->setText(s);
-  else {
-    if (s!=old) {
-      l->setText("");
-      //qDebug("Was '%s' is '%s'",s.toAscii().data(), old.toAscii().data() );
-      l->setBackgroundRole(QPalette::Button);//QPalette::AlternateBase);
-      l->setFrame(false);
+    l->blockSignals(true);
+    QString old = l->text();
+    if (l->hasFrame() && old.isEmpty() ) l->setText(s);
+    else {
+        if (s!=old) {
+            if (l->isEnabled()) {
+                l->setText("");
+                l->setBackgroundRole(QPalette::Button);//QPalette::AlternateBase);
+                l->setFrame(false);
+            }
+            else
+                l->setText("<various>");
+            //qDebug("Was '%s' is '%s'",s.toLatin1().data(), old.toLatin1().data() );
+        }
     }
-  }
-  //QFont f = l->font();
-  //f.setItalic(s=="none");
-  //l->setFont(f);
-  l->blockSignals(false);
+    //QFont f = l->font();
+    //f.setItalic(s=="none");
+    //l->setFont(f);
+    l->blockSignals(false);
 }
 
 void mySetText(QSpinBox *l, int i){
@@ -771,7 +777,7 @@ void GuiPanel::setSelection(const QModelIndexList &newsel, int k){
   if (newsel.size()!=0) sel = newsel[0].row();
 
   //bool vertexani=false;
-  //bool rigged=false;
+  //bool skinned=false;
   //bool vertexcolor=false;
   /*bool manyMaterials=false;
   int flags=-1;
@@ -785,7 +791,7 @@ void GuiPanel::setSelection(const QModelIndexList &newsel, int k){
     sel = i->row();
     if (k==MESH && sel<(int)data->mesh.size() ) {
       BrfMesh *m = &(data->mesh[sel]);
-      rigged |= m->IsRigged();
+      skinned |= m->IsSkinned();
       vertexani |= m->frame.size()>1;
       vertexcolor |= m->hasVertexColor;
       np += m->frame[0].pos.size();
@@ -868,6 +874,7 @@ switch (TokenEnum(k)){
   case MESH: {
     myClear(ui->boxFlags);
     myClear(ui->boxMaterial);
+    myClear(ui->boxTexture);
     myClear(ui->boxNVerts);
     myClear(ui->boxNFaces);
     myClear(ui->boxNPos);
@@ -879,6 +886,8 @@ switch (TokenEnum(k)){
     ui->viewRefAni->setVisible( false );
 
     int hasAni=-1,hasCol=-1,hasTan=-1,hasRig=-1;
+    bool hasBump=false, hasSpec=false, hasTran = false;
+
     for (QModelIndexList::ConstIterator i=newsel.constBegin(); i!=newsel.constEnd(); i++){
       int sel = i->row();
       if (sel<0 || sel>=(int)data->mesh.size()) continue;
@@ -887,15 +896,24 @@ switch (TokenEnum(k)){
       mySetText(ui->boxFlags, StringH(m->flags & ~(3<<16) ));
       mySetText( ui->boxMaterial ,  m->material );
 
-      mySetValueAdd( ui->boxNVerts , m->vert.size());
-      mySetValueAdd( ui->boxNFaces , m->face.size());
-      mySetValueAdd( ui->boxNPos   , m->frame[0].pos.size());
-      mySetValueMax( ui->boxNFrames, m->frame.size());
+      mySetValueAdd( ui->boxNVerts , (int)m->vert.size());
+      mySetValueAdd( ui->boxNFaces , (int)m->face.size());
+      mySetValueAdd( ui->boxNPos   , (int)m->frame[0].pos.size());
+      mySetValueMax( ui->boxNFrames, (int)m->frame.size());
 
       mySetCompositeVal(hasAni, m->HasVertexAni());
       mySetCompositeVal(hasCol, m->hasVertexColor);
-      mySetCompositeVal(hasTan, m->HasTangentField());
-      mySetCompositeVal(hasRig, m->IsRigged());
+      mySetCompositeVal(hasTan, m->StoresTangentField());
+      mySetCompositeVal(hasRig, m->IsSkinned());
+
+      bool ta,tb,tc;
+      QString s = inidata.mat2tex(m->material,&ta,&tb,&tc);
+      if (s.isEmpty()) s = tr("<not found>");
+      hasBump |= ta;
+      hasSpec |= tb;
+      hasTran |= tc;
+
+      mySetText( ui->boxTexture, s );
 
       for (unsigned int fi=0; fi < m->frame.size(); fi++)
          frameTime[fi]=m->frame[fi].time;
@@ -912,7 +930,11 @@ switch (TokenEnum(k)){
     ui->cbMeshHasTan->setCheckState(myCheckState(hasTan));
     ui->cbMeshHasRig->setCheckState(myCheckState(hasRig));
 
-    updateMaterial(ui->boxMaterial->text());
+    ui->cbTransp->setEnabled( hasTran );
+    ui->cbNormalmap->setEnabled( hasBump );
+    ui->cbSpecularmap->setEnabled( hasSpec );
+
+
     ui->timeOfFrame->setEnabled( newsel.size()==1 );
 
     int nfr = (int)ui->boxNFrames->value();
@@ -958,6 +980,10 @@ switch (TokenEnum(k)){
 
     }
 
+    ui->cbTransp->setEnabled( true );
+    ui->cbNormalmap->setEnabled( true );
+    ui->cbSpecularmap->setEnabled( true );
+
     BodyPartModel* bmp = ((BodyPartModel*)(ui->lvBones->model()));
     if (sel>=0 && nsel==1 && sel<(int)data->skeleton.size()) {
       BrfSkeleton &s(data->skeleton[sel]);
@@ -998,6 +1024,10 @@ switch (TokenEnum(k)){
       ui->frameNumberAni->setMinimum(1);
       updateFrameNumber( ui->frameNumberAni->value() );
     }
+
+    ui->cbTransp->setEnabled( true );
+    ui->cbNormalmap->setEnabled( true );
+    ui->cbSpecularmap->setEnabled( true );
 
     ui->rbRiggingcolor->setEnabled( true ); // quick: use "true": just let user edit them
     ui->rbVertexcolor->setEnabled( true );
@@ -1067,18 +1097,20 @@ switch (TokenEnum(k)){
 
 
 
-void GuiPanel::updateMaterial(QString a){
+void GuiPanel::updateSingleMaterial(QString a){
 
-  if (ui->boxMaterial->hasFrame()) {
+//  if (ui->boxMaterial->hasFrame()) {
     bool bump;
     bool spec;
-    QString s = inidata.mat2tex(a,&bump,&spec);
-    if (s.isEmpty()) s="<not found>";
+    bool transp;
+    QString s = inidata.mat2tex(a,&bump,&spec,&transp);
+    if (s.isEmpty()) s=tr("<not found>");
     ui->boxTexture  ->setText( s );
     ui->cbNormalmap->setEnabled(bump);
     ui->cbSpecularmap->setEnabled(spec);
-  } else
-    ui->boxTexture  ->setText( "<various>" );
+    ui->cbTransp->setEnabled(transp);
+//  } else
+//    ui->boxTexture  ->setText( "<various>" );
 }
 
 void GuiPanel::updateFrameNumber(int newFr){
@@ -1134,7 +1166,7 @@ void GuiPanel::updateVisibility(){
 
   // set visibility
   if (k==MESH) {
-    ui->viewFloor->setVisible(true);
+    ui->cbFloor->setVisible(true);
     ui->viewRefSkin->setVisible(false);
 
     ui->viewMeshRendering->setVisible(true);
@@ -1146,7 +1178,7 @@ void GuiPanel::updateVisibility(){
     ui->viewHitboxes->setVisible(ui->viewRefSkel->isVisible() );
 
   } else if (k==ANIMATION) {
-	ui->viewFloor->setVisible(false);
+    ui->cbFloor->setVisible(false);
     ui->viewRefSkin->setVisible(true);
     ui->viewRefAni->setVisible(false);
     ui->viewMeshRendering->setVisible( ui->cbSkin->currentIndex() );
@@ -1154,7 +1186,7 @@ void GuiPanel::updateVisibility(){
     ui->viewRefSkel->setVisible(true);
     ui->viewHitboxes->setVisible( true );
   } else if (k==BODY) {
-    ui->viewFloor->setVisible(true);
+    ui->cbFloor->setVisible(true);
     ui->viewRefSkin->setVisible( ui->cbComparisonMesh->isChecked() && collisionBodyHasSkel);
     ui->viewRefSkel->setVisible(false);
     ui->viewRefAni->setVisible(false);
@@ -1162,7 +1194,7 @@ void GuiPanel::updateVisibility(){
     ui->viewAni->setVisible(false);
     ui->viewHitboxes->setVisible(false);
   } else if (k==TEXTURE) {
-    ui->viewFloor->setVisible(false);
+    //ui->cbFloor->setVisible(false);
     ui->viewRefSkin->setVisible(false);
     ui->viewRefSkel->setVisible(false);
     ui->viewRefAni->setVisible(false);
@@ -1170,7 +1202,7 @@ void GuiPanel::updateVisibility(){
     ui->viewAni->setVisible(ui->labNFrames->isVisible());
     ui->viewHitboxes->setVisible(false);
   } else if (k==SKELETON) {
-    ui->viewFloor->setVisible(false);
+    ui->cbFloor->setVisible(false);
     ui->viewRefSkin->setVisible(true);
     ui->viewRefSkel->setVisible(false);
     ui->viewRefAni->setVisible(true);
@@ -1179,7 +1211,7 @@ void GuiPanel::updateVisibility(){
     ui->viewHitboxes->setVisible( true );
   }
   else {
-    ui->viewFloor->setVisible(false);
+    ui->cbFloor->setVisible(false);
     ui->viewRefSkin->setVisible(false);
     ui->viewRefSkel->setVisible(false);
     ui->viewRefAni->setVisible(false);

@@ -729,7 +729,7 @@ bool IniData::checkDuplicated(std::vector<T> &v, int j, int maxErr){
     } else
     if (d.fi!=j || d.oi!=(int)i) {
       errorList.push_back(
-          QTextBrowser::QTextBrowser::tr("<b>Duplicate:</b> %1 was already defined in file %2")
+          QTextBrowser::tr("<b>Duplicate:</b> %1 was already defined in file %2")
           .arg(link(j,i,kind)).arg(linkShort(d.fi,d.oi,kind))
       );
     }
@@ -875,7 +875,7 @@ void IniData::addUsedBy(int i, int j, int kind,char* usedName,  int usedKind){
   ObjCoord o (i,j,kind);
 
   if (d.fi>=0){
-    usedBy(d).push_back( o );
+
 
 
 
@@ -887,7 +887,7 @@ void IniData::addUsedBy(int i, int j, int kind,char* usedName,  int usedKind){
         if (noDot(getName(d2))==nameDot)
         usedBy(d2).push_back( o );
       }
-    }
+    } else usedBy(d).push_back( o );
   }
 
 
@@ -971,7 +971,7 @@ bool IniData::findErrors(int maxErr){
     }
   }
   if (errorList.size()>maxErr) {
-    errorList.push_back(QTextBrowser::QTextBrowser::tr("<i>more errors to follow...</i>"));
+    errorList.push_back(QTextBrowser::tr("<i>more errors to follow...</i>"));
     return true;
   } else return false;
 
@@ -993,7 +993,7 @@ QString IniData::searchAllNames(const QString &s, bool cr, int to) const{
     searchAllNamesV(s,to,file[i].skeleton,i,res);
   for (int i=0; i<(int)file.size(); i++) if (origin[i]==MODULE_RES || cr)
     searchAllNamesV(s,to,file[i].animation,i,res);
-  if (res.isEmpty()) res+=QTextBrowser::QTextBrowser::tr("<i>[0 results]</i>");
+  if (res.isEmpty()) res+=QTextBrowser::tr("<i>[0 results]</i>");
 
   return res;
 }
@@ -1012,13 +1012,17 @@ IniData::IniData(BrfData &_currentBrf): currentBrf(_currentBrf)
   isWarband = false;
 }
 
-QString IniData::mat2tex(const QString &n, bool* hasBump, bool* hasSpec){
+QString IniData::mat2tex(const QString &n, bool* hasBump, bool* hasSpec, bool *hasTransp){
   // find in ini file
+    /*
   int j = _findByName( currentBrf.material, n);
   if (j>=0) {
-    *hasBump = currentBrf.material[j].HasBump();
-    *hasSpec = currentBrf.material[j].HasSpec();
-    return currentBrf.material[j].diffuseA;
+    BrfMaterial &m(currentBrf.material[j]);
+    *hasBump = m.HasBump();
+    *hasSpec = m.HasSpec();
+    *hasTransp = m.FlagAlphaTest() || m.FlagBlend();
+    qDebug("Flags: %x",m.flags);
+    return m.diffuseA;
   }
   for (unsigned int i=0; i<filename.size(); i++)
   for (unsigned int j=0; j<file[i].material.size(); j++) {
@@ -1026,12 +1030,24 @@ QString IniData::mat2tex(const QString &n, bool* hasBump, bool* hasSpec){
     if (QString(m.name)==n) {
       *hasBump = m.HasBump();
       *hasSpec = m.HasSpec();
+      *hasTransp = m.FlagAlphaTest() || m.FlagBlend();
       return m.diffuseA;
     }
   }
-  *hasBump = false;
-  *hasSpec = false;
-  return QString();
+  */
+    BrfMaterial *m = findMaterial(n);
+    if (m) {
+        *hasBump = m->HasBump();
+        *hasSpec = m->HasSpec();
+        *hasTransp = m->FlagAlphaTest() || m->FlagBlend();
+        return m->diffuseA;
+
+    } else {
+        *hasBump = false;
+        *hasSpec = false;
+        *hasTransp = false;
+        return QString();
+    }
 }
 
 BrfMaterial* IniData::findMaterial(const QString &name,ObjCoord ) {
@@ -1197,14 +1213,14 @@ bool IniData::loadAll(int howFast){
 			QString com1, com2;
 			//char com1[512], com2[512];
 			QStringList p = s.split('=');
-			//if (sscanf(s.toAscii().data(),"%s = %s",com1, com2)==2)
+            //if (sscanf(s.toLatin1().data(),"%s = %s",com1, com2)==2)
 			if (p.size()==2){
 				com1 = p[0].trimmed();
 				com2 = p[1].trimmed();
 				bool loadRes = QString(com1)=="load_resource";
 				bool loadMod = ((QString(com1)=="load_mod_resource") || (QString(com1)=="load_module_resource"));
 				if (loadRes || loadMod) {
-					if (!addBrfFile(com2.toAscii().data(),(loadMod)?MODULE_RES:COMMON_RES,lineN,howFast)) res=false;
+                    if (!addBrfFile(com2.toLatin1().data(),(loadMod)?MODULE_RES:COMMON_RES,lineN,howFast)) res=false;
 				}
 
 			}
@@ -1231,7 +1247,7 @@ bool IniData::loadAll(int howFast){
 				}
 			}
 			if (nk>0)
-				qDebug("[spoiler=textures with flag: %d]\n%s\n[/spoiler]",fn,res.toAscii().data());
+                qDebug("[spoiler=textures with flag: %d]\n%s\n[/spoiler]",fn,res.toLatin1().data());
 		}
 		*/
 
@@ -1346,9 +1362,9 @@ void IniData::updateBeacuseBrfDataSaved(){
 int IniData::nRefObjects() const{
   int res=0;
   for (unsigned int i=0; i<file.size(); i++) {
-    res+=file[i].texture.size();
-    res+=file[i].material.size();
-    res+=file[i].shader.size();
+    res+=(int)file[i].texture.size();
+    res+=(int)file[i].material.size();
+    res+=(int)file[i].shader.size();
   }
   return res;
 }
@@ -1356,13 +1372,13 @@ int IniData::nRefObjects() const{
 int IniData::nObjects() const{
   int res=0;
   for (unsigned int i=0; i<file.size(); i++) {
-    res+=file[i].texture.size();
-    res+=file[i].material.size();
-    res+=file[i].body.size();
-    res+=file[i].mesh.size();
-    res+=file[i].shader.size();
-    res+=file[i].animation.size();
-    res+=file[i].skeleton.size();
+    res+=(int)file[i].texture.size();
+    res+=(int)file[i].material.size();
+    res+=(int)file[i].body.size();
+    res+=(int)file[i].mesh.size();
+    res+=(int)file[i].shader.size();
+    res+=(int)file[i].animation.size();
+    res+=(int)file[i].skeleton.size();
   }
   return res;
 }
@@ -1382,7 +1398,7 @@ bool IniData::addBrfFile(const char* name, Origin ori, int line, int howFast){
   filename.push_back(brfFn);
   origin.push_back(ori);
   BrfData &d(file[file.size()-1]);
-  //printf("Loading \"%s\"...\n",brfFn.toAscii().data());
+  //printf("Loading \"%s\"...\n",brfFn.toLatin1().data());
   bool onlyMatAndTextures = (howFast<=2);
   if (howFast>1) {
     if (!d.LoadFast(brfFn.toStdWString().c_str(),onlyMatAndTextures)) {
@@ -1426,8 +1442,8 @@ template <class T>
 void _updateListNoExt(QStringList &l, const vector<T> &d){
   for (unsigned int i=0; i<d.size(); i++) {
     QString s(d[i].name);
-    int p = s.indexOf(".");
-    if (p>0) s.truncate( p );
+    int j = s.indexOf(".");
+    if (j>0) s.truncate( j );
     l.append(s);
   }
 }
@@ -1461,9 +1477,9 @@ bool IniData::saveLists(const QString &fn){
   if (!f.isOpen()) return false;
   for (int i=0; i<N_TOKEN; i++) {
     int s = namelist[i].size();
-    f.write( QString("[%1] %2:\n").arg(tokenBrfName[i]).arg(s).toAscii().data());
+    f.write( QString("[%1] %2:\n").arg(tokenBrfName[i]).arg(s).toLatin1().data());
     for (int j=0; j<s; j++){
-      f.write( QString("%1,").arg(namelist[i][j]).toAscii().data() );
+      f.write( QString("%1,").arg(namelist[i][j]).toLatin1().data() );
     }
     f.write( "\n" );
   }
