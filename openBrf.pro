@@ -9,7 +9,7 @@ CONFIG += exceptions
 
 QMAKE_CXXFLAGS += -std=c++0x
 #QMAKE_CXXFLAGS += -Werror
-VCGLIB = /home/cory/Source/VCGLib
+VCGLIB = ./vcglib
 QMAKE_CXXFLAGS += "-isystem $$VCGLIB"
 
 # RC_FILE = openBrf.rc
