@@ -4251,7 +4251,7 @@ void MainWindow::updatePaths(){
 	modStatus->setText(QString("module:[<b>%1</b>]").arg(modName) );
 
 	glWidget->texturePath[0]=mabPath+"/Textures";
-	glWidget->texturePath[1]=modPath()+"/Textures";
+	glWidget->texturePath[1]="/Textures";
 
 	settings->setValue("modName",modName);
 	settings->setValue("mabPath",mabPath);
