@@ -214,7 +214,11 @@ int VcgMesh::simplify(int percFaces){
   qparams.PreserveBoundary	= false;
   qparams.PreserveTopology	= false;
   //qparams.PreserveBoundaryMild	= false ;
-  qparams.BoundaryWeight  = 500;
+  // BoundaryWeight is now split into BoundaryQuadricWeight and QualityQuadricWeight where:
+  // BoundaryQuadricWeight = BoundaryWeight
+  // QualityQuadricWeight  = BoundaryWeight / 100
+  qparams.BoundaryQuadricWeight = 500;
+  qparams.QualityQuadricWeight = qparams.BoundaryQuadricWeight / 100;
 
 
   //qparams.QualityThr	= atof(argv[i]+2);
